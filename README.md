@@ -2,7 +2,7 @@
     <body>
         <h1>Visualized Design of Counting Principle Based on d3.js</h1>
         <em>Team of VDCP:</em><br />
-        <a href="http://www.bupt.edu.cn"><img src="http://www.bupt.edu.cn/img/logo.gif" align="right" alt="北京邮电大学" /></a>
+        <a href="http://www.bupt.edu.cn"><img height="92" width="278" src="http://www.bupt.edu.cn/img/logo.gif" align="right" alt="北京邮电大学" /></a>
         <ul>
             <li><a href="https://github.com/chenrz925">chenrz925</a></li>
             <li></li>
