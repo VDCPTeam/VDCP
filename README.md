@@ -3,7 +3,7 @@
         <h1>Visualized Design of Counting Principle Based on d3.js</h1>
         <em>Team of VDCP:</em><br />
         <ul>
-            <li>chenrz925</li>
+            <li><a href="https://github.com/chenrz925">chenrz925</a></li>
             <li></li>
             <li></li>
             <li></li>
