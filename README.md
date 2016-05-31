@@ -1,6 +1,6 @@
 <html>
     <body>
-        <h1>Visualized Design of Counting Principle Based on d3.js</h1>
+        <h1>基于d3.js的计数原理可视化设计</h1>
         <em>Team of VDCP:</em><br />
         <a href="http://www.bupt.edu.cn"><img height="92" width="278" src="http://www.bupt.edu.cn/img/logo.gif" align="right" alt="北京邮电大学" /></a>
         <ul>
