@@ -2,6 +2,7 @@
     <body>
         <h1>Visualized Design of Counting Principle Based on d3.js</h1>
         <em>Team of VDCP:</em><br />
+        <a href="http://www.bupt.edu.cn"><img src="http://www.bupt.edu.cn/img/logo.gif" align="right" alt="北京邮电大学" /></a>
         <ul>
             <li><a href="https://github.com/chenrz925">chenrz925</a></li>
             <li></li>
@@ -20,6 +21,5 @@
         计数原理的规律与性质，激发他们对数学的学习兴趣与热情，使数学的学习变得简单<br />
         而富有魅力。
         </blockquote>
-        <a href="http://www.bupt.edu.cn">北京邮电大学</a>
     </body>
 </html>
