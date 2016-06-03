@@ -5,7 +5,7 @@
         <a href="http://www.bupt.edu.cn"><img height="92" width="278" src="http://www.bupt.edu.cn/img/logo.gif" align="right" alt="北京邮电大学" /></a>
         <ul>
             <li><a href="https://github.com/chenrz925">chenrz925</a></li>
-            <li></li>
+            <li><a href="https://github.com/LHFData">LHFData</a></li>
             <li></li>
             <li></li>
         </ul>
