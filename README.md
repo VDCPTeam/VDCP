@@ -6,7 +6,7 @@
         <ul>
             <li><a href="https://github.com/chenrz925">chenrz925</a></li>
             <li><a href="https://github.com/LHFData">LHFData</a></li>
-            <li></li>
+            <li><a href="https://github.com/rrookkie">rrookkie</a></li>
             <li></li>
         </ul>
         <blockquote>
