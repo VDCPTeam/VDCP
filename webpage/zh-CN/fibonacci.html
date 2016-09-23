@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>斐波那契数列</title>
+    <script type="text/javascript" src="../../library/script/d3.min.js"></script>
+    <script type="text/javascript" src="../../library/script/jquery-3.1.0.min.js"></script>
+    <style type="text/css">
+        body {
+            position: relative;
+        }
+    </style>
+</head>
+<body onresize="resize()">
+<script type="text/javascript">
+    //实时获取窗口宽度
+    var width;
+    var height;
+    var span = d3.select("body").append("span").style("font-size", "8px");
+    resize();
+    function resize() {
+        width = $(window).width();
+        height = $(window).height();
+        span.text(width + ", " + height);
+    }
+    //生成元素的位置
+    
+    //
+</script>
+</body>
+</html>
