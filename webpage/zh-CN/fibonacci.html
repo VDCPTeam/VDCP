@@ -2,9 +2,11 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>斐波那契数列</title>
+    <title>计数原理可视化-斐波那契数列</title>
     <script type="text/javascript" src="../../library/script/d3.min.js"></script>
     <script type="text/javascript" src="../../library/script/jquery-3.1.0.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../library/bootstrap/css/bootstrap.min.css">
+    <script type="text/javascript" src="../../library/bootstrap/js/bootstrap.min.js"></script>
     <style type="text/css">
         body {
             position: relative;
@@ -19,23 +21,112 @@
         }
         path {
             z-index: 0;
+<<<<<<< HEAD
+=======
+            opacity: 0.8;
+        }
+        div.fi-setd-i {
+            position: fixed;
+            width: 60px;
+            height: 120px;
+            left: 0px;
+            bottom: 0;
+            z-index: 9999;
+        }
+        div.fi-setd-i:hover {
+            background-color: black;
+            border-radius: 0 8px 8px 0;
+            border: 1px solid azure;
+            opacity: 0.5;
+        }
+        div.fi-setd-i input {
+            position: relative;
+            transform: rotate(270deg);
+            height: 60px;
+            width: 100px;
+            left: -120px;
+            top: 30px;
+        }
+        @keyframes rangeMoveIn {
+            0% {
+                left: -120px;
+            }
+            50% {
+                left: -70px;
+            }
+            100% {
+                left: -20px;
+            }
+        }
+        div.fi-setd-i:hover input {
+            animation: rangeMoveIn;
+            animation-duration: 500ms;
+            left: -20px;
+        }
+        @font-face{
+            font-family:WYXinQingNian;
+            src:url(../../library/font/WenYue-XinQingNianTi-NC-W8.otf);
+>>>>>>> master
         }
     </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 </head>
 <body onresize="resize()">
-<script type="text/javascript">
+<nav class="navbar navbar-default" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="../../index.html" style="font-family: WYXinQingNian">计数原理可视化</a>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li><a href="fibonacci.html" class="active">斐波那契</a></li>
+                <li><a href="">杨辉三角</a></li>
+                <li><a href="">排列组合</a></li>
+                <li><a href="">鸽巢原理</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Language<span class="caret"></span></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li class="divider"></li>
+                        <li><a href="../../webpage/zh-CN/index.html">简体中文</a></li>
+                        <li><a href="../../webpage/zh-TW/index.html">繁体中文</a></li>
+                        <li><a href="../../webpage/en-US/index.html">English</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="fi-setd-i">
+    <input type="range" min="0" max="100" onchange="rangeOnChange()"/>
+</div>
+<script type="text/javascript" src="../../script/fibonacci/sin.js"></script>
+<!--<script type="text/javascript">
     //实时获取窗口宽度
     var width;
     var height;
+<<<<<<< HEAD
     var elementMarginY = Math.round(height / 30);
     var topMargin = Math.round(height * 0.05);
     var halfT = Math.round(height / 7);
     var svg = d3.select("body").append("svg").classed("graph", true);
     //var span = d3.select("body").append("span").style("font-size", "8px");
+=======
+    var baseRadious = 5;
+    //var span = script.select("body").append("span").style("font-size", "8px");
+>>>>>>> master
     resize();
     function resize() {
         width = $(window).width();
         height = $(window).height();
+<<<<<<< HEAD
         elementMarginY = Math.round(height / 30);
         topMargin = Math.round(height * 0.05);
         halfT = Math.round(height / 7);
@@ -272,5 +363,72 @@
     }
     hover();
 </script>
+=======
+        //span.text(width + ", " + height);
+    }
+    var svg = d3.select("body").append("svg").classed("graph", true)
+            .style("width", width + "px")
+            .style("height", height + "px");
+    $("body").css("width", width + "px")
+            .css("height", height + "px");
+    //
+    //
+    var fiData = new Array();
+    fiData.push({
+        x: Math.round(width / 2),
+        y: Math.round(height / 2),
+        data: 1
+    });
+    fiData.push({
+        x: fiData[0].x + baseRadious,
+        y: fiData[0].y + baseRadious,
+        data: 1
+    });
+    var duration = 1000;
+    var i;
+    for (i = 2; i < 50; i++) {
+        fiData[i] = {
+            x: 0,
+            y: 0,
+            data: fiData[i - 1].data + fiData[i - 2].data
+        }
+        switch (i % 4) {
+            case 0:
+                fiData[i].x = fiData[i - 1].x - fiData[i].data * baseRadious;
+                fiData[i].y = fiData[i - 1].y + fiData[i].data * baseRadious;
+                break;
+            case 1:
+                fiData[i].x = fiData[i - 1].x + fiData[i].data * baseRadious;
+                fiData[i].y = fiData[i - 1].y + fiData[i].data * baseRadious;
+                break;
+            case 2:
+                fiData[i].x = fiData[i - 1].x + fiData[i].data * baseRadious;
+                fiData[i].y = fiData[i - 1].y - fiData[i].data * baseRadious;
+                break;
+            case 3:
+                fiData[i].x = fiData[i - 1].x - fiData[i].data * baseRadious;
+                fiData[i].y = fiData[i - 1].y - fiData[i].data * baseRadious;
+                break;
+        }
+    }
+    function render() {
+        svg.selectAll("circle").data(fiData).enter()
+                .append("circle")
+                .attr("cx", function (d, i) {
+                    return d.x + "px";
+                })
+                .attr("cy", function (d, i) {
+                    return d.y + "px";
+                })
+                .attr("r", "3px")
+                .style("stroke", "steelblue")
+                .style("fill", "steelblue");
+        //svg.selectAll("path").data(fiData).enter()
+        //        .append("path")
+        //        .
+    }
+    render();
+</script>-->
+>>>>>>> master
 </body>
 </html>
