@@ -4,7 +4,7 @@ var height;
 var elementMarginY = Math.round(height / 30);
 var topMargin = Math.round(height * 0.05);
 var halfT = Math.round(height / 7);
-var svg = d3.select("body").append("div").classed("container", true).append("svg").classed("sin", true).style("width", "100%");
+var svg = d3.select("body").append("div").classed("container well", true).append("svg").classed("sin", true).style("width", "100%");
 //var span = script.select("body").append("span").style("font-size", "8px");
 resize();
 function resize() {

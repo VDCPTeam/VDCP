@@ -2,13 +2,30 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>计数原理可视化-首页</title>
-    <link rel="stylesheet" type="text/css" href="../../library/bootstrap/css/bootstrap.min.css">
+    <title>计数原理可视化-斐波那契数列</title>
+    <script type="text/javascript" src="../../library/script/d3.min.js"></script>
     <script type="text/javascript" src="../../library/script/jquery-3.1.0.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../library/bootstrap/css/bootstrap.min.css">
     <script type="text/javascript" src="../../library/bootstrap/js/bootstrap.min.js"></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <style type="text/css">@font-face{font-family:WYXinQingNian;src:url(../../library/font/WenYue-XinQingNianTi-NC-W8.otf);}</style>
-</head>
+    <!--Material Theme Start-->
+    <!-- Material Design fonts -->
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto:300,400,500,700">
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/icon?family=Material+Icons">
+    <!-- Bootstrap -->
+    <!-- Bootstrap Material Design -->
+    <script type="text/javascript" src="../../library/bootstrap/js/material.min.js"></script>
+    <script type="text/javascript" src="../../library/bootstrap/js/ripples.min.js"></script>
+    <script type="text/javascript">$.material.init()</script>
+    <link rel="stylesheet" type="text/css" href="../../library/bootstrap/css/bootstrap-material-design.css">
+    <link rel="stylesheet" type="text/css" href="../../library/bootstrap/css/ripples.min.css">
+    <!--End-->
+    <style type="text/css">
+        circle{stroke:darkgrey;}
+        path{opacity:0.8;}
+        @font-face{font-family:WYXinQingNian;src:url(../../library/font/WenYue-XinQingNianTi-NC-W8.otf);  }
+        .low{bottom: 0;}
+    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"></head>
 <body>
 <nav class="navbar navbar-default" role="navigation">
     <div class="container-fluid">
@@ -42,5 +59,52 @@
         </div>
     </div>
 </nav>
+<div class="container-fluid">
+    <div class="carousel slide" id="carousel-635512">
+        <ol class="carousel-indicators">
+            <li class="active" data-slide-to="0" data-target="#carousel-635512">
+            </li>
+            <li data-slide-to="1" data-target="#carousel-635512">
+            </li>
+            <li data-slide-to="2" data-target="#carousel-635512">
+            </li>
+        </ol>
+        <div class="carousel-inner">
+            <div class="item active">
+                <img alt="" src="http://www.runoob.com/try/bootstrap/layoutit/v3/default1.jpg" />
+                <div class="carousel-caption">
+                    <h4>
+                        First Thumbnail label
+                    </h4>
+                    <p>
+                        Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.
+                    </p>
+                </div>
+            </div>
+            <div class="item">
+                <img alt="" src="http://www.runoob.com/try/bootstrap/layoutit/v3/default.jpg" />
+                <div class="carousel-caption">
+                    <h4>
+                        Second Thumbnail label
+                    </h4>
+                    <p>
+                        Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.
+                    </p>
+                </div>
+            </div>
+            <div class="item">
+                <img alt="" src="http://www.runoob.com/try/bootstrap/layoutit/v3/default2.jpg" />
+                <div class="carousel-caption">
+                    <h4>
+                        Third Thumbnail label
+                    </h4>
+                    <p>
+                        Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.
+                    </p>
+                </div>
+            </div>
+        </div> <a class="left carousel-control" href="#carousel-635512" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a> <a class="right carousel-control" href="#carousel-635512" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
+    </div>
+</div>
 </body>
 </html>
