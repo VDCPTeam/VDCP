@@ -39,7 +39,7 @@ function elementPosition(i) {
 svg.style("height", function (d, i) {
     return elementPosition(fiData.length + 1).y + "px";
 });
-$("div#setting .dropdown-menu").append("<li>图形设置</li><li class='divider'></li><li>曲线张合幅度</li><li><input id='sinpath' type='range' min='0' max='100' onchange='rangeOnChange()'/></li>");
+$("div#setting .dropdown-menu").append("<li class='list-group-item'>图形设置</li><li class='list-group-item'>曲线张合幅度<br /><input id='sinpath' type='range' min='0' max='100' onchange='rangeOnChange()'/></li>");
 $("div#info .dropdown-menu").append("<li class='list-group-item list-group-item-info'>斐波那契数列</li><li class='list-group-item list-group-item-info'><i>F(N)=F(N-1)+F(N-2)<br />(n≥2,n∈N*)</i><br />斐波那契数列的每一项都会以同种颜色指向作为其和的前两项</li>");
 $("div#info .dropdown-menu i").css("font-family", "Times New Roman");
 //生成两点中位线上点
