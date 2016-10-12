@@ -4,7 +4,7 @@ var height;
 var elementMarginY = Math.round(height / 30);
 var topMargin = Math.round(height * 0.05);
 var halfT = Math.round(height / 7);
-var svg = d3.select("body").append("div").classed("container", true).append("svg").classed("graph", true);
+var svg = d3.select("body").append("div").classed("container", true).append("svg").classed("sin", true).style("width", "100%");
 //var span = script.select("body").append("span").style("font-size", "8px");
 resize();
 function resize() {
@@ -14,6 +14,8 @@ function resize() {
     topMargin = Math.round(height * 0.08);
     halfT = Math.round(height / 7);
     //span.text(width + ", " + height);
+    if (fiData != undefined)
+        render(duration);
 }
 //生成原始数列
 var fiData = new Array();
@@ -31,12 +33,15 @@ function elementPosition(i) {
 
     }
     result.y = Math.round(topMargin + elementMarginY * i);
-    result.x = Math.round(Math.round(width * 24 / 49) * Math.sin((Math.PI / halfT) * result.y - Math.PI) + width / 2);
+    result.x = Math.round(Math.round(width * 11 / 23) * Math.sin((Math.PI / halfT) * result.y - Math.PI) + width / 2);
     return result;
 }
 svg.style("height", function (d, i) {
     return elementPosition(fiData.length + 1).y + "px";
 });
+$("div#setting .dropdown-menu").append("<li>图形设置</li><li class='divider'></li><li>曲线张合幅度</li><li><input id='sinpath' type='range' min='0' max='100' onchange='rangeOnChange()'/></li>");
+$("div#info .dropdown-menu").append("<li class='list-group-item list-group-item-info'>斐波那契数列</li><li class='list-group-item list-group-item-info'><i>F(N)=F(N-1)+F(N-2)<br />(n≥2,n∈N*)</i><br />斐波那契数列的每一项都会以同种颜色指向作为其和的前两项</li>");
+$("div#info .dropdown-menu i").css("font-family", "Times New Roman");
 //生成两点中位线上点
 var quadraticCurveDistance = 0.15;
 function quadraticCurvePoint(i1, i2, r) {
@@ -217,7 +222,7 @@ var duration = 1000;
 var id;
 $(this).scroll(function () {
     //alert($(this).scrollTop() - elementPosition(fiData.length - 30).y);
-    if ($(this).scrollTop() - elementPosition(fiData.length - 30).y > elementMarginY) {
+    if ($(this).scrollTop() - elementPosition(fiData.length - 32).y > elementMarginY) {
         var i = fiData.length;
         fiData.push(fiData[i - 2] + fiData[i - 1]);
         render();
@@ -228,19 +233,6 @@ $(this).scroll(function () {
         hover();
     }
 });
-//文字提示坐标生成器
-function rectPosition(i) {
-    var result = {
-        x: elementPosition(i).x + 9 * height / 500 + 10,
-        y: elementPosition(i).y + 9 * height / 500 + 10
-    }
-}
-function textPosition(i) {
-    var result = {
-        x: elementPosition(i).x + 9 * height / 500 + 20,
-        y: elementPosition(i).x + 9 * height / 500 + 40
-    }
-}
 function hover() {
     $("circle").hover(function () {
         $(this).attr("r", function () {
@@ -273,7 +265,7 @@ function hover() {
 }
 hover();
 function rangeOnChange() {
-    var range = $("div.fi-setd-i input");
+    var range = $("input#sinpath");
     quadraticCurveDistance = range.val() / 200;
     render(duration);
 }
