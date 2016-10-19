@@ -8,18 +8,6 @@
     <script type="text/javascript" src="../../library/script/jquery-3.1.0.min.js"></script>
     <link rel="stylesheet" type="text/css" href="../../library/bootstrap/css/bootstrap.min.css">
     <script type="text/javascript" src="../../library/bootstrap/js/bootstrap.min.js"></script>
-    <!--Material Theme Start-->
-    <!-- Material Design fonts -->
-    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto:300,400,500,700">
-    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/icon?family=Material+Icons">
-    <!-- Bootstrap -->
-    <!-- Bootstrap Material Design -->
-    <script type="text/javascript" src="../../library/bootstrap/js/material.min.js"></script>
-    <script type="text/javascript" src="../../library/bootstrap/js/ripples.min.js"></script>
-    <script type="text/javascript">$.material.init()</script>
-    <link rel="stylesheet" type="text/css" href="../../library/bootstrap/css/bootstrap-material-design.css">
-    <link rel="stylesheet" type="text/css" href="../../library/bootstrap/css/ripples.min.css">
-    <!--End-->
     <style type="text/css">
         circle{stroke:darkgrey;}
         path{opacity:0.8;}
@@ -52,10 +40,12 @@
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Language<span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
+                        <li><a href="//d3js.org" id="ver"></a></li>
                         <li class="divider"></li>
                         <li><a href="../../webpage/zh-CN/index.html">简体中文</a></li>
                         <li><a href="../../webpage/zh-TW/index.html">繁体中文</a></li>
                         <li><a href="../../webpage/en-US/index.html">English</a></li>
+                        <script type="text/javascript" >$("#ver").text(d3.version)</script>
                     </ul>
                 </li>
             </ul>
@@ -64,7 +54,7 @@
 </nav>
 <div data-spy="affix" class="affix-top low" style="z-index: 999">
     <div class="btn-group dropup" id="setting">
-        <button type="button" class="btn btn-fab btn-default dropdown-toggle" data-toggle="dropdown">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
             <span class="glyphicon glyphicon-align-center glyphicon-wrench"></span>
         </button>
         <ul class="dropdown-menu list-group" role="menu">
@@ -72,7 +62,7 @@
         </ul>
     </div>
     <div class="btn-group dropup" id="info">
-        <button type="button" class="btn btn-fab btn-info dropdown-toggle" data-toggle="dropdown">
+        <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
             <span class="glyphicon glyphicon-align-center glyphicon-info-sign"></span>
         </button>
         <ul class="dropdown-menu list-group" role="menu">
@@ -80,6 +70,12 @@
         </ul>
     </div>
 </div>
-<script type="text/javascript" src="../../script/fibonacci/sin.js"></script>
+<div class="container well" >
+    <!--此处为展示可视化效果SVG的容器，内容为空，需挂载js显示-->
+</div>
+<!--<script type="text/javascript" src="../../script/fibonacci/sin.js"></script>-->
+<script type="text/javascript">
+
+</script>
 </body>
 </html>
