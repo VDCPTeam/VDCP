@@ -4,7 +4,7 @@ var height;
 var elementMarginY = Math.round(height / 30);
 var topMargin = Math.round(height * 0.05);
 var halfT = Math.round(height / 7);
-var svg = d3.select("body").append("div").classed("container", true).append("svg").classed("sin", true).style("width", "100%");
+var svg = d3.select("div.container.well").append("svg").classed("sin", true).style("width", "100%");
 //var span = script.select("body").append("span").style("font-size", "8px");
 resize();
 function resize() {
@@ -245,6 +245,9 @@ function hover() {
         $("path#" + id).css("strokeWidth", (2 + Math.round(height / 400) * 3).toString()).css("stroke", "red");
         id = id.replace("p", "t");
         $("text#" + id).css("fill", "transparent");
+        $(this).popover({
+
+        });
     }, function () {
         $(this).css("stroke", "darkgrey").attr("r", function () {
             var r;
@@ -260,6 +263,9 @@ function hover() {
             color = Math.round(((height / 2000) * 0xff) % 0xff);
             var str = "#" + color.toString(16) + color.toString(16) + color.toString(16);
             return str;
+        });
+        $(this).popover({
+
         });
     });
 }
