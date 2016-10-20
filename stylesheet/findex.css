@@ -1,0 +1,108 @@
+.version .version-container {
+    height: 436px;
+}
+
+.version h2 {
+    font-size: 26px;
+    font-weight: 400;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 80px;
+    color: #333;
+    margin-top: 0;
+}
+
+.version ul {
+    padding-top: 50px;
+    width: 100%;
+    overflow: hidden;
+}
+
+.version ul li {
+    position: relative;
+    float: left;
+    width: 255px;
+    text-align: center;
+    -webkit-font-smoothing: antialiased;
+}
+
+.version ul li .icon {
+    display: block;
+    width: 140px;
+    height: 140px;
+    line-height: 140px;
+    margin: 0 auto;
+    background: url(../image/version.png) no-repeat;
+    font-size: 24px;
+    color: #fff;
+    text-align: center;
+    -webkit-transition: all .7s ease;
+    -moz-transition: all .7s ease;
+    -o-transition: all .7s ease;
+    -ms-transition: all .7s ease;
+    transition: all .7s ease;
+}
+
+.version ul li .icon:hover {
+    transform: scale(1.2);
+    -webkit-transform: scale(1.2);
+    -moz-transform: scale(1.2);
+    -o-transform: scale(1.2);
+    -ms-transform: scale(1.2);
+    /*background:url(../images/1.jpg.jpg) no-repeat;
+    font-size: 0px;*/
+}
+
+.version ul li.free .icon {
+    background-position: 0 0
+}
+
+.version ul li.location .icon {
+    background-position: -560px 0
+}
+
+.version ul li.business .icon {
+    background-position: -280px 0
+}
+
+.version ul li.fmcg .icon {
+    background-position: -140px 0
+}
+
+.version ul li.custom .icon {
+    background-position: -420px 0
+}
+
+.version ul li.free .icon:hover {
+    *background-position: 0 -140px;;
+    *color: #6de88f;
+}
+
+.version ul li.location .icon:hover {
+    *background-position: -560px -140px;
+    *color: #fbc737;
+}
+
+.version ul li.business .icon:hover {
+    *background-position: -280px -140px;
+    *color: #57c4e8;
+}
+
+.version ul li.fmcg .icon:hover {
+    *background-position: -140px -140px;
+    *color: #59c4e8;
+}
+
+.version ul li.custom .icon:hover {
+    *background-position: -420px -140px;
+    *color: #ea8998;
+}
+
+.version ul li p {
+    width: 124px;
+    font-size: 14px;
+    line-height: 24px;
+    color: #666666;
+    text-align: center;
+    margin: 36px auto;
+}

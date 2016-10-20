@@ -1,45 +1,35 @@
-﻿<!-- index.html -->
-<html>
+<!DOCTYPE html>
+<html lang="zh-CN">
 <head>
-    <meta charset="utf-8">
-    <link href="../../stylesheet/findex.css" rel="stylesheet" type="text/css">
-    <script type="text/javascript" src="./library/script/jquery-3.1.0.min.js"></script>
-    <title>Simple D3 Dev Env</title>
+    <meta charset="UTF-8">
+    <meta name="theme-color" content="#009688">
+    <title>计数原理可视化-斐波那契数列</title>
+    <script type="text/javascript" src="../../library/script/d3.min.js"></script>
+    <script type="text/javascript" src="../../library/script/jquery-3.1.0.min.js"></script>
     <link rel="stylesheet" type="text/css" href="../../library/bootstrap/css/bootstrap.min.css">
     <script type="text/javascript" src="../../library/bootstrap/js/bootstrap.min.js"></script>
-    <style>
-        body {
-            height: 100%;
-            width: 100%;
-            position: relative;
-            background-size: auto;
-            background-position: center;
+    <style type="text/css">
+        circle {
+            stroke: darkgrey;
         }
 
-        .MyRect {
-            fill: steelblue;
+        path {
+            opacity: 0.8;
         }
 
-        .MyText {
-            color: black;
+        @font-face {
+            font-family: WYXinQingNian;
+            src: url(../../library/font/WenYue-XinQingNianTi-NC-W8.otf);
         }
 
-        .version {
-            height: 436px;
-            background-color: #f6f6f6;
+        .low {
+            bottom: 0;
         }
-
-        #bg {
-            visibility: hidden;
-        }
-
-        ul li {
-            list-style: none;
-        }
-        @font-face{font-family:WYXinQingNian;src:url(../../library/font/WenYue-XinQingNianTi-NC-W8.otf);  }
     </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <script type="text/javascript" src="../../script/fibonacci.js"></script>
 </head>
-<body>
+<body onresize="resize()">
 <nav class="navbar navbar-default" role="navigation">
     <div class="container-fluid">
         <div class="navbar-header">
@@ -75,31 +65,28 @@
         </div>
     </div>
 </nav>
-<section class="version" style="z-index:999">
-    <div class="version-container wrap">
-
-        <h2>计数原理可视化</h2>
-        <ul>
-            <li class="free">
-                <a class="icon" href="helix.html">斐波那契</a>
-                <p>点此进入</p>
-            </li>
-            <li class="location">
-                <a class="icon" href="#">鸽巢原理</a>
-                <p>点此进入</p>
-            </li>
-            <li class="business">
-                <a class="icon" href="#">杨辉三角</a>
-                <p>点此进入</p>
-            </li>
-            <li class="custom">
-                <a class="icon" href="#">排列组合</a>
-                <p>点此进入</p>
-            </li>
+<div data-spy="affix" class="affix-top low" style="z-index: 999">
+    <div class="btn-group dropup" id="setting">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+            <span class="glyphicon glyphicon-align-center glyphicon-wrench"></span>
+        </button>
+        <ul class="dropdown-menu list-group" role="menu">
+            <!--此处为空，内容放入挂载的js里-->
         </ul>
     </div>
+    <div class="btn-group dropup" id="info">
+        <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
+            <span class="glyphicon glyphicon-align-center glyphicon-info-sign"></span>
+        </button>
+        <ul class="dropdown-menu list-group" role="menu">
+            <!--此处为空，内容放入挂载的js里-->
+        </ul>
     </div>
-</section>
+    <a class="btn btn-default glyphicon glyphicon-arrow-right" href="sin.html"></a>
+</div>
+<div class="container well">
+    <!--此处为空，内容放入挂载的js里-->
+</div>
+<script type="text/javascript" src="../../script/fibonacci/helix.js"></script>
 </body>
-
 </html>

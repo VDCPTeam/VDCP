@@ -15,7 +15,7 @@ function resize() {
 var svg = d3.select("div.container.well").append("svg").classed("helix", true)
     .style("width", "100%")
     .style("height", Math.round(height * 0.75) + "px");
-var fiData = new Array();
+var fiData = [];
 function dataMaker(max) {
     fiData[0] = {
         x: Math.round(width / 2),
@@ -32,8 +32,10 @@ function dataMaker(max) {
         fiData[i] = {
             x: 0,
             y: 0,
+            rx: 0,
+            ry: 0,
             data: fiData[i - 1].data + fiData[i - 2].data
-        }
+        };
         switch (i % 4) {
             case 0:
                 fiData[i].x = fiData[i - 1].x - fiData[i].data * baseRadious;
@@ -81,7 +83,7 @@ function quadraticCurvePoint(i1, i2, r) {
         i1: i1,
         i2: i2,
         d: d
-    }
+    };
     return result;
 }
 function initRender() {
@@ -194,7 +196,7 @@ setInterval(function () {
 }, 5000);
 $("div#info .dropdown-menu").append("<li class='list-group-item list-group-item-info'>斐波那契数列</li><li class='list-group-item list-group-item-info'><i>F(N)=F(N-1)+F(N-2)<br />(n≥2,n∈N*)</i><br />斐波那契螺旋线也同样展示了其前两项之和为下一项的特性</li>");
 $("div#info .dropdown-menu i").css("font-family", "Times New Roman");
-
+$("div#setting .dropdown-menu").append("<li class=.list-group-item'>图形设置</li><li class='list-group-item'><div class='btn-group'><button class='btn btn-default glyphicon glyphicon-plus' onclick='plus()'></button><button class='btn btn-default glyphicon glyphicon-minus' onclick='minus()'></button><button class='btn btn-danger glyphicon glyphicon-pause' id='auto' onclick='halt()'></button></div></li>");
 var control = 0;
 function halt() {
     if (control == 1000)
