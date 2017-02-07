@@ -10,6 +10,10 @@
       {
         "text": "Test 2",
         "href": "#test2"
+      },
+      {
+        "text": "Test 3",
+        "href": "#test3"
       }
     ]
   },
