@@ -28,7 +28,7 @@
                 <label><i class="material-icons">translate</i></label>
                 <select id="select-language" onchange="selected_lang()">
                     <option value="zh-cn" selected>简体中文</option>
-                    <option value="en-us">English</option>
+                    <option value="en">English</option>
                 </select>
             </div>
         </div>
@@ -45,16 +45,39 @@
         <ul class="collapsible" data-collapsible="accordion"></ul>
     </li>
 </ul>
+<!--底部按钮-->
 <div class="fixed-action-btn toolbar">
     <a class="btn-floating btn-large cyan">
         <i class="large material-icons">menu</i>
     </a>
     <ul>
-        <li class="waves-effect waves-light"><a href="#!" class=" button-collapse" data-activates="slide-out"><i
+        <li class="waves-effect waves-light"><a href="#!" class="tooltipped button-collapse" data-activates="slide-out"
+                                                id="text-tooltip-sidenav" data-position="top" data-delay="50"><i
                 class="material-icons">pageview</i></a></li>
-        <li class="waves-effect waves-light"><a href="#!"><i class="material-icons">description</i></a></li>
-        <li class="waves-effect waves-light"><a href="#!"><i class="material-icons">info</i></a></li>
+        <li class="waves-effect waves-light"><a href="#info-modal" class="tooltipped" id="text-tooltip-info"
+                                                data-position="top" data-delay="50"><i
+                class="material-icons">info</i></a></li>
+        <li class="waves-effect waves-light"><a href="#help-modal" class="tooltipped" id="text-tooltip-help"
+                                                data-position="top" data-delay="50"><i
+                class="material-icons">live_help</i></a></li>
     </ul>
+</div>
+<!--信息及帮助-->
+<div id="info-modal" class="modal blue">
+    <div class="modal-content">
+
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat"></a>
+    </div>
+</div>
+<div id="help-modal" class="modal orange">
+    <div class="modal-content">
+
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat"></a>
+    </div>
 </div>
 <script type="text/javascript">
     /**
@@ -77,21 +100,37 @@
     /**
      * 控制多语言及文本
      */
+    var lang;
+    var isinitial = true;
     $(document).ready(function () {
         $('select').material_select();
     });
-    var lang = $("#select-language").find("option:selected").val();
+    var txt = document.cookie.split(";");
+    lang = $("#select-language").find("option:selected").val();
+    for (var i = 0; i < txt.length; i++) {
+        if (txt[i].match("\{.*\}")) {
+            lang = JSON.parse(txt[i]).lang;
+        }
+    }
     function catalog_id(sect, exam) {
         return "s" + sect + "e" + exam + "id";
     }
     function selected_lang() {
-        lang = $("#select-language").find("option:selected").val();
+        if (!isinitial) {
+            lang = $("#select-language").find("option:selected").val();
+        } else isinitial = false;
         $.getJSON("text/" + lang + ".json", function (data) {
             $("#text-catalog").text(data.catalog);
+            $("#text-tooltip-sidenav").attr("data-tooltip", data.tooltip_sidenav);
+            $("#text-tooltip-help").attr("data-tooltip", data.tooltip_help);
+            $("#text-tooltip-info").attr("data-tooltip", data.tooltip_info);
+            $(document).ready(function () {
+                $('.tooltipped').tooltip({delay: 50});
+            });
         });
         $.getJSON("catalog/" + lang + ".json", function (data) {
             $("#catalog .collapsible").remove();
-            $("#catalog").append("<ul class='collapsible' data-collapsible='accordion'></ul>")
+            $("#catalog").append("<ul class='collapsible' data-collapsible='accordion'></ul>");
             var co_wrapper = $("#catalog .collapsible");
             for (var i = 0; i < data.length; i++) {
                 var temp_li = co_wrapper.append("<li id='" + catalog_id(i, 0) + "'></li>");
@@ -107,10 +146,15 @@
             $(document).ready(function () {
                 $('.collapsible').collapsible();
             });
-        })
+        });
+        document.cookie = JSON.stringify({"lang": lang});
     }
     selected_lang();
-    <!--注意：涉及页面文本的修改要到json里面改-->
+    $(document).ready(function () {
+        // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
+        $('.modal').modal();
+    });
 </script>
+<!--注意：涉及页面文本的修改要到json里面改-->
 </body>
 </html>
