@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <!--标题栏-->
@@ -8,11 +8,15 @@
     <script src="lib/jquery-3.3.1/jquery-3.1.1.min.js"></script>
     <script src="lib/materialize-0.97.8/js/materialize.min.js"></script>
     <link rel="stylesheet" href="lib/materialize-0.97.8/css/materialize.min.css"/>
+    <style type="text/css">
+        body {
+            background: gray;
+        }
+    </style>
     <script type="text/javascript">
     </script>
 </head>
-<!--颜色的改法：如果要给一个元素设置背景颜色的话，使用class设置，具体的使用方法见http://www.materialscss.com/color-->
-<body class="grey lighten-2">
+<body>
 <!--侧边栏-->
 <ul id="slide-out" class="side-nav z-depth-5">
     <li>
@@ -64,7 +68,7 @@
 
     </div>
     <div class="modal-footer">
-        <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat text-yes"></a>
+        <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat"></a>
     </div>
 </div>
 <div id="help-modal" class="modal orange">
@@ -72,11 +76,85 @@
 
     </div>
     <div class="modal-footer">
-        <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat text-yes"></a>
+        <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat"></a>
     </div>
 </div>
-<script type="text/javascript" src="js/temp-control.js"></script>
+<script type="text/javascript">
+    /**
+     * 控制侧边栏
+     */
+    $(".button-collapse").sideNav({
+        draggable: true
+    });
+    var isopen = true;
+    function switchnav() {
+        if (isopen) {
+            isopen = false;
+            $(".button-collapse").sideNav("show");
+        }
+        else {
+            isopen = true;
+            $(".button-collapse").sideNav("hide");
+        }
+    }
+    /**
+     * 控制多语言及文本
+     */
+    var lang;
+    var isinitial = true;
+    $(document).ready(function () {
+        $('select').material_select();
+    });
+    var txt = document.cookie.split(";");
+    lang = $("#select-language").find("option:selected").val();
+    for (var i = 0; i < txt.length; i++) {
+        if (txt[i].match("\{.*\}")) {
+            lang = JSON.parse(txt[i]).lang;
+        }
+    }
+    function catalog_id(sect, exam) {
+        return "s" + sect + "e" + exam + "id";
+    }
+    function selected_lang() {
+        if (!isinitial) {
+            lang = $("#select-language").find("option:selected").val();
+        } else isinitial = false;
+        $.getJSON("text/" + lang + ".json", function (data) {
+            $("#text-catalog").text(data.catalog);
+            $("#text-tooltip-sidenav").attr("data-tooltip", data.tooltip_sidenav);
+            $("#text-tooltip-help").attr("data-tooltip", data.tooltip_help);
+            $("#text-tooltip-info").attr("data-tooltip", data.tooltip_info);
+            $(document).ready(function () {
+                $('.tooltipped').tooltip({delay: 50});
+            });
+        });
+        $.getJSON("catalog/" + lang + ".json", function (data) {
+            $("#catalog .collapsible").remove();
+            $("#catalog").append("<ul class='collapsible' data-collapsible='accordion'></ul>");
+            var co_wrapper = $("#catalog .collapsible");
+            for (var i = 0; i < data.length; i++) {
+                var temp_li = co_wrapper.append("<li id='" + catalog_id(i, 0) + "'></li>");
+                temp_li.find("#" + catalog_id(i, 0)).append("<div class='collapsible-header'><a class='waves-effect btn-flat' href='" + data[i].href + "'>" + data[i].text + "</a></div>");
+                var temp_inner = temp_li.find("#" + catalog_id(i, 0)).append("<div class='collapsible-body'></div>");
+                if (data[i].child != undefined) {
+                    var temp_colle = temp_inner.find(".collapsible-body").append("<div class='collection'></div>");
+                    for (var j = 0; j < data[i].child.length; j++) {
+                        temp_colle.find(".collection").append("<a href='" + data[i].child[j].href + "' class='collection-item waves-effect btn-flat'>" + data[i].child[j].text + "</a>");
+                    }
+                }
+            }
+            $(document).ready(function () {
+                $('.collapsible').collapsible();
+            });
+        });
+        document.cookie = JSON.stringify({"lang": lang});
+    }
+    selected_lang();
+    $(document).ready(function () {
+        // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
+        $('.modal').modal();
+    });
+</script>
 <!--注意：涉及页面文本的修改要到json里面改-->
-<!--示例：text/zh-cn.json里面是{"yes": "好的"}，那么在网页里只需要建一个ID为yes的span标签就可以-->
 </body>
 </html>
