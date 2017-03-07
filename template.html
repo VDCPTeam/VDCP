@@ -63,20 +63,20 @@
     </ul>
 </div>
 <!--信息及帮助-->
-<div id="info-modal" class="modal blue">
+<div id="info-modal" class="modal blue lighten-3">
     <div class="modal-content">
-
+        <h4 id="text-modal-info"></h4>
     </div>
     <div class="modal-footer">
-        <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat"></a>
+        <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat text-yes"></a>
     </div>
 </div>
-<div id="help-modal" class="modal orange">
+<div id="help-modal" class="modal orange lighten-3">
     <div class="modal-content">
-
+        <h4 id="text-modal-help"></h4>
     </div>
     <div class="modal-footer">
-        <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat"></a>
+        <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat text-yes"></a>
     </div>
 </div>
 <script type="text/javascript">
@@ -120,10 +120,22 @@
             lang = $("#select-language").find("option:selected").val();
         } else isinitial = false;
         $.getJSON("text/" + lang + ".json", function (data) {
+            /**
+             * 注意：
+             * 每一个文本信息在json中储存后，
+             * 都要在如下部分注册，
+             * 先后顺序不产生影响。
+             */
             $("#text-catalog").text(data.catalog);
             $("#text-tooltip-sidenav").attr("data-tooltip", data.tooltip_sidenav);
             $("#text-tooltip-help").attr("data-tooltip", data.tooltip_help);
             $("#text-tooltip-info").attr("data-tooltip", data.tooltip_info);
+            $(".text-yes").text(data.yes);
+            $("#text-modal-info").text(data.modal_info);
+            $("#text-modal-help").text(data.modal_help);
+            /**
+             * 到这里结束
+             */
             $(document).ready(function () {
                 $('.tooltipped').tooltip({delay: 50});
             });
