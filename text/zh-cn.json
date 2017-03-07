@@ -2,5 +2,7 @@
   "catalog": "目录",
   "tooltip_sidenav": "目录导航",
   "tooltip_info": "提示信息",
-  "tooltip_help": "帮助信息"
+  "tooltip_help": "帮助信息",
+  "yes": "好的"
 }
+//要添加文本直接在这个json中添加
