@@ -5,22 +5,52 @@
     <!--标题栏-->
     <title>template</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <script src="lib/jquery-3.3.1/jquery-3.1.1.min.js"></script>
-    <script src="lib/materialize-0.97.8/js/materialize.min.js"></script>
-    <link rel="stylesheet" href="lib/materialize-0.97.8/css/materialize.min.css"/>
+    <script src="../lib/jquery-3.3.1/jquery-3.1.1.min.js"></script>
+    <script src="../lib/materialize-0.97.8/js/materialize.min.js"></script>
+    <link rel="stylesheet" href="../lib/materialize-0.97.8/css/materialize.min.css"/>
+    <script src="../lib/d3-4.7.1/d3.min.js"></script>
     <style type="text/css">
         body {
             background: gray;
         }
     </style>
     <script type="text/javascript">
+        function windowResize() {
+            var height = $(window).height();
+            console.log(height);
+            $("svg").css("height", function () {
+                return height + "px";
+            });
+        }
+        windowResize();
     </script>
 </head>
-<body>
+<body onresize="windowResize()">
+<div class="container">
+    <div class="row">
+        <svg class="col s12 m12 l12 grey lighten-5 z-depth-5">
+            <g class="bunny">
+                <path id="path3912"
+                      style="stroke-linejoin:round;fill-rule:evenodd;stroke:#000000;stroke-linecap:round;stroke-width:6;fill:#008080"
+                      d="m64.188 5.3125c-5.397 0.0813-10.898 1.0389-16.594 3.5313-9.817 4.2952-13.554 9.5252-16.282 14.968-6.538-0.307-13.468 2.455-18.218 7.938-7.3948 8.534-6.7113 20.389 1.531 26.438 2.24 1.644 4.798 2.641 7.5 3.124-1.063 4.28-0.91 8.757 0.187 13.219-0.158 0.044-0.31 0.076-0.468 0.125-6.958 2.178-10.97 9.256-8.938 15.75 0.747 2.386 2.204 4.346 4.094 5.782 1.73 1.79 4.454 2.466 7.125 1.5 3.388-1.226 5.531-4.662 5.25-8.063 4.838 7.044 11.348 13.245 17.969 17.565-3.132 2.04-5.007 4.69-4.938 7.56 0.045 1.87 0.5 4.28 2.406 5.16 5.356 2.46 12.173 2.75 18.907 2.68 6.644-0.07 13.36-0.49 18.562-3.03 1.833-0.89 2.139-3.3 2.094-5.15-0.013-0.55-0.101-1.1-0.25-1.63 3.256-0.79 6.06-1.98 8.344-3.53 4.213 3.86 10.941 4.27 16.151 0.66 6-4.15 7.72-12.064 3.85-17.66-3.11-4.492-8.87-6.111-14.126-4.438-1.317-4.594-3.729-9.761-7.406-15.5-8.605-13.428-28.229-23.563-43.969-25.531 0.719-2.053 1.093-4.161 1.093-6.219 10.581 1.08 21.879 1.693 38.594-0.906 5.763-0.896 7.759-2.691 2-7.031-7.125-5.37-15.153-9.126-25.437-8.906 5.516-2.421 10.784-5.283 15.25-8.375 5.825-4.034 7.757-7.3146-1.844-8.9378-4.128-0.6978-8.24-1.157-12.437-1.0937z"></path>
+                <path id="path3782"
+                      style="fill-rule:evenodd;fill:#cccccc"
+                      d="m64.188 5.3125c-5.397 0.0813-10.898 1.0389-16.594 3.5313-9.817 4.2952-13.554 9.5252-16.282 14.968-6.538-0.307-13.468 2.455-18.218 7.938-7.3948 8.534-6.7113 20.389 1.531 26.438 2.24 1.644 4.798 2.641 7.5 3.124-1.063 4.28-0.91 8.757 0.187 13.219-0.158 0.044-0.31 0.076-0.468 0.125-6.958 2.178-10.97 9.256-8.938 15.75 0.747 2.386 2.204 4.346 4.094 5.782 1.73 1.79 4.454 2.466 7.125 1.5 3.388-1.226 5.531-4.662 5.25-8.063 4.838 7.044 11.348 13.245 17.969 17.565-3.132 2.04-5.007 4.69-4.938 7.56 0.045 1.87 0.5 4.28 2.406 5.16 5.356 2.46 12.173 2.75 18.907 2.68 6.644-0.07 13.36-0.49 18.562-3.03 1.833-0.89 2.139-3.3 2.094-5.15-0.013-0.55-0.101-1.1-0.25-1.63 3.256-0.79 6.06-1.98 8.344-3.53 4.213 3.86 10.941 4.27 16.151 0.66 6-4.15 7.72-12.064 3.85-17.66-3.11-4.492-8.87-6.111-14.126-4.438-1.317-4.594-3.729-9.761-7.406-15.5-8.605-13.428-28.229-23.563-43.969-25.531 0.719-2.053 1.093-4.161 1.093-6.219 10.581 1.08 21.879 1.693 38.594-0.906 5.763-0.896 7.759-2.691 2-7.031-7.125-5.37-15.153-9.126-25.437-8.906 5.516-2.421 10.784-5.283 15.25-8.375 5.825-4.034 7.757-7.3146-1.844-8.9378-4.128-0.6978-8.24-1.157-12.437-1.0937z"></path>
+                <path id="path3927"
+                        style="fill-rule:evenodd;fill:#000000"
+                        d="m27.875 37.154a1.6792 1.5113 0 1 1 -3.358 0 1.6792 1.5113 0 1 1 3.358 0z"
+                        transform="matrix(2 0 0 2 -28.211 -37.658)"></path>
+                <path id="path3929"
+                      style="stroke-linejoin:round;stroke:#000000;stroke-linecap:round;stroke-width:3;fill:none"
+                      d="m41.309 112.22c2.741-8.74 11.136-8.26 19.479-7.06-2.847-3.98-4.653-7.182-4.366-14.439 0.397-10.047 12.123-15.813 19.478-11.418"></path>
+            </g>
+        </svg>
+    </div>
+</div>
 <!--侧边栏-->
 <ul id="slide-out" class="side-nav z-depth-5">
     <li>
-        <div class="container"><img class="responsive-img" src="img/logo.png" style="margin: 25px 0"></div>
+        <div class="container"><img class="responsive-img" src="../img/logo.png" style="margin: 25px 0"></div>
     </li>
     <li>
         <div class="container">
@@ -66,6 +96,7 @@
 <div id="info-modal" class="modal blue lighten-3">
     <div class="modal-content">
         <h4 id="text-modal-info"></h4>
+        <div id="text-fib-0-info"></div>
     </div>
     <div class="modal-footer">
         <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat text-yes"></a>
@@ -119,20 +150,21 @@
         if (!isinitial) {
             lang = $("#select-language").find("option:selected").val();
         } else isinitial = false;
-        $.getJSON("text/" + lang + ".json", function (data) {
+        $.getJSON("../text/" + lang + ".json", function (data) {
             /**
              * 注意：
              * 每一个文本信息在json中储存后，
              * 都要在如下部分注册，
              * 先后顺序不产生影响。
              */
-            $("#text-catalog").text(data.catalog);
+            $("#text-catalog").html(data.catalog);
             $("#text-tooltip-sidenav").attr("data-tooltip", data.tooltip_sidenav);
             $("#text-tooltip-help").attr("data-tooltip", data.tooltip_help);
             $("#text-tooltip-info").attr("data-tooltip", data.tooltip_info);
-            $(".text-yes").text(data.yes);
-            $("#text-modal-info").text(data.modal_info);
-            $("#text-modal-help").text(data.modal_help);
+            $(".text-yes").html(data.yes);
+            $("#text-modal-info").html(data.modal_info);
+            $("#text-modal-help").html(data.modal_help);
+            $("#text-fib-0-info").html(data.fib_0_info);
             /**
              * 到这里结束
              */
@@ -140,7 +172,7 @@
                 $('.tooltipped').tooltip({delay: 50});
             });
         });
-        $.getJSON("catalog/" + lang + ".json", function (data) {
+        $.getJSON("../catalog/" + lang + ".json", function (data) {
             $("#catalog .collapsible").remove();
             $("#catalog").append("<ul class='collapsible' data-collapsible='accordion'></ul>");
             var co_wrapper = $("#catalog .collapsible");
@@ -168,5 +200,9 @@
     });
 </script>
 <!--注意：涉及页面文本的修改要到json里面改-->
+<!--开始本页内容-->
+<script type="text/javascript">
+
+</script>
 </body>
 </html>
