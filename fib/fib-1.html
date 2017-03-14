@@ -108,8 +108,6 @@
      */
     var lang;
     var isinitial = true;
-    var fib_0_intro;
-    var next;
     $(document).ready(function () {
         $('select').material_select();
     });
@@ -241,9 +239,7 @@
             });
         });
     }, 100);
-    $.getJSON("../text/" + lang + ".json", function (data) {
-        Materialize.toast("<span>" + data.fib_0_intro + "</span><a data-target='info-modal' class='btn'>" + data.next + "</a>", 10000);
-    });
+    Materialize.toast("<span>从兔子的繁殖中诞生的数学问题……</span><a data-target='info-modal' class='btn'>下一步</a>", 10000);
 </script>
 </body>
 </html>
