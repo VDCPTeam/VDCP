@@ -71,7 +71,7 @@
 <div id="info-modal" class="modal blue lighten-3">
     <div class="modal-content">
         <h4 id="text-modal-info"></h4>
-        <div id="text-fib-0-info"></div>
+        <div id="text-fib-1-info"></div>
     </div>
     <div class="modal-footer">
         <a href="fib-1.html" class=" modal-action modal-close waves-effect waves-green btn-flat text-next"></a>
@@ -82,7 +82,7 @@
         <h4 id="text-modal-help"></h4>
     </div>
     <div class="modal-footer">
-        <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat text-yes"></a>
+        <a href="#" class=" modal-action modal-close waves-effect waves-green btn-flat text-yes"></a>
     </div>
 </div>
 <script type="text/javascript">
@@ -141,7 +141,7 @@
             $(".text-yes").html(data.yes);
             $("#text-modal-info").html(data.modal_info);
             $("#text-modal-help").html(data.modal_help);
-            $("#text-fib-0-info").html(data.fib_0_info);
+            $("#text-fib-1-info").html(data.fib_1_info);
             $(".text-next").html(data.next);
             /**
              * 到这里结束
@@ -180,66 +180,51 @@
 <!--注意：涉及页面文本的修改要到json里面改-->
 <!--开始本页内容-->
 <script type="text/javascript">
-    var svg = d3.select("svg#svg-content");
-    var svg_width = parseInt(svg.style("width"));
-    var svg_height = 800;
-    console.log("[" + svg_width + "," + svg_height + "]");
-    var simulation = d3.forceSimulation().force("charge", d3.forceManyBody().distanceMax(200).strength(function () {
-        return 2
-    })).force("center", d3.forceCenter(svg_width / 2, svg_height / 2)).force("collision", d3.forceCollide().radius(15)).force("x", d3.forceX(svg_width / 2).strength(function () {
-        return 5;
-    })).force("y", d3.forceY(svg_height / 2).strength(function () {
-        return 5;
-    }));
-    var bunnyCodes = [];
-    var bunnyCode = 0;
-    var fibonacci = [1, 1];
-    fibonacci.extend = function () {
-        fibonacci.push(fibonacci[fibonacci.length - 2] + fibonacci[fibonacci.length - 1]);
-    };
-    fibonacci.sum = function () {
-        var sum = 0;
-        for (var i = 0; i < fibonacci.length; ++i)
-            sum += fibonacci[i];
-        return sum;
-    };
-    function dragstarted(d) {
-        d.fx = d.x;
-        d.fy = d.y;
+var svg = d3.select("svg#svg-content");
+var svg_width = parseInt(svg.style("width"));
+var svg_height = parseInt(svg.style("height"));
+console.log("SVG[" + svg_width + "," + svg_height + "]");
+var nodes_elements = svg.append("g").attr("id", "nodes");
+var adult_bunnies = [];
+var youth_bunnies = [];
+var fibonacci = [1, 1];
+var id_counter = 0;
+var mon_counter = 0;
+//var simulation = d3.forceSimulation();
+function Bunny(id, parent) {
+    this.id = id;
+    this.parent = parent;
+    this.state = "youth";
+    this.grow = function () {
+        this.state = "adult";
     }
-    function dragged(d) {
-        d.fx = d3.event.x;
-        d.fy = d3.event.y;
+}
+setInterval(function () {
+    ++mon_counter;
+    var new_youth_bunny = mon_counter >= 3 ? fibonacci[mon_counter - 3] : mon_counter == 1 ? 0 : 1;
+    for (var i = 0; i < new_youth_bunny; ++i) {
+        youth_bunnies.push(new Bunny(id_counter, id_counter++ - new_youth_bunny));
     }
-    function dragended(d) {
+    var adult_nodes = nodes_elements.selectAll("circle.adult").data(adult_bunnies).enter().append("circle").classed("adult", true).attr("r", "10px").attr("cx", function () {
+        return Math.round(Math.random() * svg_width) + "px";
+    }).attr("cy", function () {
+        return Math.round(Math.random() * svg_height) + "px";
+    }).attr("fill", "#2196f3").attr("stroke", "#90caf9");
+    var youth_nodes = nodes_elements.selectAll("circle.youth").data(youth_bunnies).enter().append("circle").classed("youth", true).attr("r", "10px").attr("cx", function () {
+        return Math.round(Math.random() * svg_width) + "px";
+    }).attr("cy", function () {
+        return Math.round(Math.random() * svg_height) + "px";
+    }).attr("fill", "#ff9800").attr("stroke", "#ffcc80");
+    adult_nodes.data(adult_bunnies).exit().remove();
+    youth_nodes.data(youth_bunnies).exit().remove();
+    fibonacci.push(fibonacci[fibonacci.length - 1] + fibonacci[fibonacci.length - 2]);
+    for (var i = 0; i < youth_bunnies.length; ++i) {
+        var yb = youth_bunnies.shift();
+        yb.grow();
+        adult_bunnies.push(yb);
     }
-    setInterval(function () {
-        simulation.restart();
-        if (bunnyCode > fibonacci[fibonacci.length - 1]) {
-            fibonacci.extend();
-        }
-        if (fibonacci.length <= 10) {
-            bunnyCodes.push({
-                code: bunnyCode++,
-                month: "mon" + fibonacci.length,
-                id: bunnyCode >= 2 ? "children" : "parent"
-            });
-            //console.log(bunnyCodes[bunnyCodes.length - 1]);
-            var bunnies;
-            bunnies = svg.selectAll("g.bunny").data(bunnyCodes).enter().append("g").classed("bunny", true).html("<path id='path3912' style='stroke-linejoin:round;fill-rule:evenodd;stroke:#000000;stroke-linecap:round;stroke-width:6;fill:#008080' d='m64.188 5.3125c-5.397 0.0813-10.898 1.0389-16.594 3.5313-9.817 4.2952-13.554 9.5252-16.282 14.968-6.538-0.307-13.468 2.455-18.218 7.938-7.3948 8.534-6.7113 20.389 1.531 26.438 2.24 1.644 4.798 2.641 7.5 3.124-1.063 4.28-0.91 8.757 0.187 13.219-0.158 0.044-0.31 0.076-0.468 0.125-6.958 2.178-10.97 9.256-8.938 15.75 0.747 2.386 2.204 4.346 4.094 5.782 1.73 1.79 4.454 2.466 7.125 1.5 3.388-1.226 5.531-4.662 5.25-8.063 4.838 7.044 11.348 13.245 17.969 17.565-3.132 2.04-5.007 4.69-4.938 7.56 0.045 1.87 0.5 4.28 2.406 5.16 5.356 2.46 12.173 2.75 18.907 2.68 6.644-0.07 13.36-0.49 18.562-3.03 1.833-0.89 2.139-3.3 2.094-5.15-0.013-0.55-0.101-1.1-0.25-1.63 3.256-0.79 6.06-1.98 8.344-3.53 4.213 3.86 10.941 4.27 16.151 0.66 6-4.15 7.72-12.064 3.85-17.66-3.11-4.492-8.87-6.111-14.126-4.438-1.317-4.594-3.729-9.761-7.406-15.5-8.605-13.428-28.229-23.563-43.969-25.531 0.719-2.053 1.093-4.161 1.093-6.219 10.581 1.08 21.879 1.693 38.594-0.906 5.763-0.896 7.759-2.691 2-7.031-7.125-5.37-15.153-9.126-25.437-8.906 5.516-2.421 10.784-5.283 15.25-8.375 5.825-4.034 7.757-7.3146-1.844-8.9378-4.128-0.6978-8.24-1.157-12.437-1.0937z'></path> <path id='path3782' style='fill-rule:evenodd;fill:#cccccc' d='m64.188 5.3125c-5.397 0.0813-10.898 1.0389-16.594 3.5313-9.817 4.2952-13.554 9.5252-16.282 14.968-6.538-0.307-13.468 2.455-18.218 7.938-7.3948 8.534-6.7113 20.389 1.531 26.438 2.24 1.644 4.798 2.641 7.5 3.124-1.063 4.28-0.91 8.757 0.187 13.219-0.158 0.044-0.31 0.076-0.468 0.125-6.958 2.178-10.97 9.256-8.938 15.75 0.747 2.386 2.204 4.346 4.094 5.782 1.73 1.79 4.454 2.466 7.125 1.5 3.388-1.226 5.531-4.662 5.25-8.063 4.838 7.044 11.348 13.245 17.969 17.565-3.132 2.04-5.007 4.69-4.938 7.56 0.045 1.87 0.5 4.28 2.406 5.16 5.356 2.46 12.173 2.75 18.907 2.68 6.644-0.07 13.36-0.49 18.562-3.03 1.833-0.89 2.139-3.3 2.094-5.15-0.013-0.55-0.101-1.1-0.25-1.63 3.256-0.79 6.06-1.98 8.344-3.53 4.213 3.86 10.941 4.27 16.151 0.66 6-4.15 7.72-12.064 3.85-17.66-3.11-4.492-8.87-6.111-14.126-4.438-1.317-4.594-3.729-9.761-7.406-15.5-8.605-13.428-28.229-23.563-43.969-25.531 0.719-2.053 1.093-4.161 1.093-6.219 10.581 1.08 21.879 1.693 38.594-0.906 5.763-0.896 7.759-2.691 2-7.031-7.125-5.37-15.153-9.126-25.437-8.906 5.516-2.421 10.784-5.283 15.25-8.375 5.825-4.034 7.757-7.3146-1.844-8.9378-4.128-0.6978-8.24-1.157-12.437-1.0937z'></path> <path id='path3927'style='fill-rule:evenodd;fill:#000000'd='m27.875 37.154a1.6792 1.5113 0 1 1 -3.358 0 1.6792 1.5113 0 1 1 3.358 0z'transform='matrix(2 0 0 2 -28.211 -37.658)'></path> <path id='path3929' style='stroke-linejoin:round;stroke:#000000;stroke-linecap:round;stroke-width:3;fill:none' d='m41.309 112.22c2.741-8.74 11.136-8.26 19.479-7.06-2.847-3.98-4.653-7.182-4.366-14.439 0.397-10.047 12.123-15.813 19.478-11.418'></path>");
-            bunnies.exit();
-        }
-        svg.selectAll("g.bunny").call(d3.drag()
-            .on("start", dragstarted)
-            .on("drag", dragged));
-        /*.on("end", dragended))*/
-        simulation.nodes(bunnyCodes).on("tick", function () {
-            svg.selectAll("g.bunny").transition().duration(100).attr("transform", function (d) {
-                return "translate(" + d.x + "," + d.y + ") scale(0.3,0.3)";
-            });
-        });
-    }, 100);
-    Materialize.toast("<span>从兔子的繁殖中诞生的数学问题……</span><a data-target='info-modal' class='btn'>下一步</a>", 10000);
+}, 5000);
+
 </script>
 </body>
 </html>

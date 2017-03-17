@@ -80,6 +80,7 @@
 <div id="help-modal" class="modal orange lighten-3">
     <div class="modal-content">
         <h4 id="text-modal-help"></h4>
+        <div id="text-fib-0-help"></div>
     </div>
     <div class="modal-footer">
         <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat text-yes"></a>
@@ -144,6 +145,7 @@
             $("#text-modal-info").html(data.modal_info);
             $("#text-modal-help").html(data.modal_help);
             $("#text-fib-0-info").html(data.fib_0_info);
+            $("#text-fib-0-help").html(data.fib_0_help);
             $(".text-next").html(data.next);
             /**
              * 到这里结束
@@ -242,7 +244,7 @@
         });
     }, 100);
     $.getJSON("../text/" + lang + ".json", function (data) {
-        Materialize.toast("<span>" + data.fib_0_intro + "</span><a data-target='info-modal' class='btn'>" + data.next + "</a>", 10000);
+        Materialize.toast("<span>" + data.fib_0_intro + "</span><a data-target='info-modal' class='btn'>" + data.next + "</a>", 3600000);
     });
 </script>
 </body>
