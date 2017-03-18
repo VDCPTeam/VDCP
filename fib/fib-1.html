@@ -80,6 +80,7 @@
 <div id="help-modal" class="modal orange lighten-3">
     <div class="modal-content">
         <h4 id="text-modal-help"></h4>
+        <div id="fib-1-help"></div>
     </div>
     <div class="modal-footer">
         <a href="#" class=" modal-action modal-close waves-effect waves-green btn-flat text-yes"></a>
@@ -142,7 +143,9 @@
             $("#text-modal-info").html(data.modal_info);
             $("#text-modal-help").html(data.modal_help);
             $("#text-fib-1-info").html(data.fib_1_info);
+            $("#fib-1-help").html(data.fib_1_help);
             $(".text-next").html(data.next);
+            document.title = data.fib_1_title;
             /**
              * 到这里结束
              */
@@ -180,51 +183,78 @@
 <!--注意：涉及页面文本的修改要到json里面改-->
 <!--开始本页内容-->
 <script type="text/javascript">
-var svg = d3.select("svg#svg-content");
-var svg_width = parseInt(svg.style("width"));
-var svg_height = parseInt(svg.style("height"));
-console.log("SVG[" + svg_width + "," + svg_height + "]");
-var nodes_elements = svg.append("g").attr("id", "nodes");
-var adult_bunnies = [];
-var youth_bunnies = [];
-var fibonacci = [1, 1];
-var id_counter = 0;
-var mon_counter = 0;
-//var simulation = d3.forceSimulation();
-function Bunny(id, parent) {
-    this.id = id;
-    this.parent = parent;
-    this.state = "youth";
-    this.grow = function () {
-        this.state = "adult";
-    }
-}
-setInterval(function () {
-    ++mon_counter;
-    var new_youth_bunny = mon_counter >= 3 ? fibonacci[mon_counter - 3] : mon_counter == 1 ? 0 : 1;
-    for (var i = 0; i < new_youth_bunny; ++i) {
-        youth_bunnies.push(new Bunny(id_counter, id_counter++ - new_youth_bunny));
-    }
-    var adult_nodes = nodes_elements.selectAll("circle.adult").data(adult_bunnies).enter().append("circle").classed("adult", true).attr("r", "10px").attr("cx", function () {
-        return Math.round(Math.random() * svg_width) + "px";
-    }).attr("cy", function () {
-        return Math.round(Math.random() * svg_height) + "px";
-    }).attr("fill", "#2196f3").attr("stroke", "#90caf9");
-    var youth_nodes = nodes_elements.selectAll("circle.youth").data(youth_bunnies).enter().append("circle").classed("youth", true).attr("r", "10px").attr("cx", function () {
-        return Math.round(Math.random() * svg_width) + "px";
-    }).attr("cy", function () {
-        return Math.round(Math.random() * svg_height) + "px";
-    }).attr("fill", "#ff9800").attr("stroke", "#ffcc80");
-    adult_nodes.data(adult_bunnies).exit().remove();
-    youth_nodes.data(youth_bunnies).exit().remove();
-    fibonacci.push(fibonacci[fibonacci.length - 1] + fibonacci[fibonacci.length - 2]);
-    for (var i = 0; i < youth_bunnies.length; ++i) {
-        var yb = youth_bunnies.shift();
-        yb.grow();
-        adult_bunnies.push(yb);
-    }
-}, 5000);
+    var svg = d3.select("svg#svg-content");
+    var svg_width = parseInt(svg.style("width"));
+    var svg_height = 800;
+    console.log("SVG[" + svg_width + "," + svg_height + "]");
+    var nodes_elements = svg.append("g").attr("id", "nodes");
+    var links_elements = svg.append("g").attr("id", "links");
+    var simulation = d3.forceSimulation().force("center", d3.forceCenter(svg_width / 2, 400)).force("collision", d3.forceCollide(10)).force("charge", d3.forceManyBody().distanceMax(50).distanceMin(10)).force("link", d3.forceLink().id(function (d) {
+        return d.sid;
+    }));
+    d3.json("data/fib-1.json", function (error, graph) {
+        var circles = nodes_elements.selectAll("circle").data(graph.node).enter().append("circle").attr("cx", (svg_width / 2) + "px").attr("cy", (svg_height / 2) + "px").attr("r", "10px").attr("stroke", "transparent").attr("fill", "transparent").attr("id", function (d, i) {
+            return d.sid;
+        }).call(d3.drag()
+            .on("start", dragstarted)
+            .on("drag", dragged)
+            .on("end", dragended));
+        var lines = links_elements.selectAll("line").data(graph.link).enter().append("line").attr("stroke", "transparent");
 
+        function ticked() {
+            circles.attr("cx", function (d) {
+                return d.x;
+            }).attr("cy", function (d) {
+                return d.y;
+            });
+            lines.attr("x1", function (d) {
+                return $("#" + d.source).attr("cx");
+            }).attr("y1", function (d) {
+                return $("#" + d.source).attr("cy");
+            }).attr("x2", function (d) {
+                return $("#" + d.target).attr("cx");
+            }).attr("y2", function (d) {
+                return $("#" + d.target).attr("cy");
+            });
+        }
+
+        simulation.nodes(graph.node).on("tick", ticked);
+        console.log(graph.node);
+        function dragstarted(d) {
+            if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+            d.fx = d.x;
+            d.fy = d.y;
+        }
+
+        function dragged(d) {
+            d.fx = d3.event.x;
+            d.fy = d3.event.y;
+        }
+
+        function dragended(d) {
+            if (!d3.event.active) simulation.alphaTarget(0);
+            d.fx = null;
+            d.fy = null;
+        }
+
+        var month = 0;
+        setInterval(function () {
+            ++month;
+            circles.transition().duration(400).attr("stroke", function (d, i) {
+                if (month == d.youmon) return "#e91e63";
+                else if (month < d.youmon) return "transparent";
+                else return "#2196f3";
+            }).attr("fill", function (d, i) {
+                if (month == d.youmon) return "#f48fb1";
+                else if (month < d.youmon) return "transparent";
+                else return "#90caf9";
+            });
+            lines.transition().duration(400).attr("stroke", function (d, i) {
+                if (month <= d.youmon - 1) return "transparent";
+                else return "#b0bec5";
+            })
+        }, 1000);
+    });
 </script>
 </body>
 </html>

@@ -7,8 +7,11 @@
   "next": "下一步",
   "modal_info": "提示",
   "modal_help": "帮助",
+  "fib_0_title": "兔子的数目-引言",
   "fib_0_info": "在古老的西方世界，有一个叫做比萨的列奥那多的人，提出了这样的一种情况：\n<blockquote><ul><li>第一个月初有一对刚诞生的小兔子</li><li>第二个月之后（第三个月初）它们成长为大兔子可以生育</li><li>每月每对可生育的大兔子会诞生下一对新小兔子</li><li>兔子永不死去</li></ul></blockquote>那么，兔子的数目将会怎么发展？",
   "fib_0_help": "请根据提示信息进行思考",
   "fib_0_intro": "从兔子的繁殖中诞生的数学问题……",
-  "fib_1_info": "<span>根据这种情况，我们得到如下的生长情况：\n<span><table class='bordered' border='1'><tr><td>月份</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>...</td></tr><tr><td>小兔子数对</td><td>1</td><td>0</td><td>1</td><td>1</td><td>2</td><td>3</td><td>5</td><td>8</td><td>...</td></tr><tr><td>大兔子数对</td><td>0</td><td>1</td><td>1</td><td>2</td><td>3</td><td>5</td><td>8</td><td>13</td><td>...</td></tr></table><span>\n所以……</span>"
+  "fib_1_title": "兔子的数目-展示",
+  "fib_1_info": "<span>根据这种情况，我们得到如下的生长情况：\n<span><table class='bordered' border='1'><tr><td>月份</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>...</td></tr><tr><td>小兔子数对</td><td>1</td><td>0</td><td>1</td><td>1</td><td>2</td><td>3</td><td>5</td><td>8</td><td>...</td></tr><tr><td>大兔子数对</td><td>0</td><td>1</td><td>1</td><td>2</td><td>3</td><td>5</td><td>8</td><td>13</td><td>...</td></tr></table><span>\n所以……</span>",
+  "fib_1_help": "<div><span><span class='pink-text'>粉色</span>为幼年期的兔子</span></div><div><span><span class='blue-text'>蓝色</span>为成熟期可生育的兔子</span></div><div><span>假如兔子不会死亡，并保持每月每对生出一对的速度，且第一月为幼年期不可生育，那么兔子数目的增长就成斐波那契数列。这里展示的是12个月内的生长状况。</span></div>"
 }
