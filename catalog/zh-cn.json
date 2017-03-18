@@ -4,12 +4,12 @@
     "href": "#1",
     "child": [
       {
-        "text": "兔子的数目",
+        "text": "兔子的数目-引言",
         "href": "../fib/fib-0.html"
       },
       {
-        "text": "测试2",
-        "href": "#test2"
+        "text": "兔子的数目-展示",
+        "href": "../fib/fib-1.html"
       },
       {
         "text": "测试3",
