@@ -74,7 +74,7 @@
         <div id="text-fib-1-info"></div>
     </div>
     <div class="modal-footer">
-        <a href="fib-1.html" class=" modal-action modal-close waves-effect waves-green btn-flat text-next"></a>
+        <a href="" class=" modal-action modal-close waves-effect waves-green btn-flat text-yes"></a>
     </div>
 </div>
 <div id="help-modal" class="modal orange lighten-3">
@@ -83,7 +83,7 @@
         <div id="fib-1-help"></div>
     </div>
     <div class="modal-footer">
-        <a href="#" class=" modal-action modal-close waves-effect waves-green btn-flat text-yes"></a>
+        <a href="fib-2.html" class=" modal-action modal-close waves-effect waves-green btn-flat text-next"></a>
     </div>
 </div>
 <script type="text/javascript">
@@ -183,6 +183,15 @@
 <!--注意：涉及页面文本的修改要到json里面改-->
 <!--开始本页内容-->
 <script type="text/javascript">
+    setTimeout(function () {
+        $("#info-modal").modal('open');
+    }, 100);
+    setTimeout(function () {
+        $("#info-modal").modal('close');
+    }, 2100);
+    setTimeout(function () {
+        $("#help-modal").modal('open');
+    }, 20000);
     var svg = d3.select("svg#svg-content");
     var svg_width = parseInt(svg.style("width"));
     var svg_height = 800;
