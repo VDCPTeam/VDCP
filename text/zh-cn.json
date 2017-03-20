@@ -13,5 +13,10 @@
   "fib_0_intro": "从兔子的繁殖中诞生的数学问题……",
   "fib_1_title": "兔子的数目-展示",
   "fib_1_info": "<span>根据这种情况，我们得到如下的生长情况：\n<span><table class='bordered' border='1'><tr><td>月份</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>...</td></tr><tr><td>小兔子数对</td><td>1</td><td>0</td><td>1</td><td>1</td><td>2</td><td>3</td><td>5</td><td>8</td><td>...</td></tr><tr><td>大兔子数对</td><td>0</td><td>1</td><td>1</td><td>2</td><td>3</td><td>5</td><td>8</td><td>13</td><td>...</td></tr></table><span>\n所以……</span>",
-  "fib_1_help": "<div><span><span class='pink-text'>粉色</span>为幼年期的兔子</span></div><div><span><span class='blue-text'>蓝色</span>为成熟期可生育的兔子</span></div><div><span>假如兔子不会死亡，并保持每月每对生出一对的速度，且第一月为幼年期不可生育，那么兔子数目的增长就成斐波那契数列。这里展示的是15个月内的生长状况。</span></div>"
+  "fib_1_help": "<div><span><span class='pink-text'>粉色</span>为幼年期的兔子</span></div><div><span><span class='blue-text'>蓝色</span>为成熟期可生育的兔子</span></div><div><span>假如兔子不会死亡，并保持每月每对生出一对的速度，且第一月为幼年期不可生育，那么兔子数目的增长就成斐波那契数列。这里展示的是16个月内的生长状况。</span></div>",
+  "fib_1_toast": [
+    "第",
+    "月,共",
+    "只兔子"
+  ]
 }
