@@ -252,6 +252,8 @@
         }
 
         var month = 0;
+        var fib_a = 1;
+        var fib_b = 1;
         setInterval(function () {
             ++month;
             circles.transition().duration(changeDuration).attr("stroke", function (d, i) {
@@ -269,6 +271,18 @@
             }).transition().duration(changeDuration).attr("stroke", function (d, i) {
                 if (month <= d.youmon - 1) return "transparent";
                 else return "#b0bec5";
+            });
+            d3.json("../text/" + lang + ".json", function (error, graph) {
+                if (month > 1) {
+                    var t = fib_a;
+                    fib_a = fib_b;
+                    fib_b = t + fib_b;
+                }
+                if (month <= maxMonth) {
+                    var toast_text = graph.fib_1_toast[0] + month + graph.fib_1_toast[1] + fib_a + graph.fib_1_toast[2];
+                    console.log(toast_text);
+                    Materialize.toast(toast_text, changeDuration);
+                }
             });
         }, changeDuration);
     });
