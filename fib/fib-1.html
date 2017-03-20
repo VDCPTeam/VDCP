@@ -183,24 +183,24 @@
 <!--注意：涉及页面文本的修改要到json里面改-->
 <!--开始本页内容-->
 <script type="text/javascript">
+    var changeDuration = 3000;
+    var maxMonth = 15;
     setTimeout(function () {
         $("#info-modal").modal('open');
     }, 100);
     setTimeout(function () {
         $("#info-modal").modal('close');
-    }, 2100);
+    }, 2900);
     setTimeout(function () {
         $("#help-modal").modal('open');
-    }, 20000);
+    }, changeDuration * (maxMonth + 2));
     var svg = d3.select("svg#svg-content");
     var svg_width = parseInt(svg.style("width"));
     var svg_height = 800;
     console.log("SVG[" + svg_width + "," + svg_height + "]");
     var nodes_elements = svg.append("g").attr("id", "nodes");
     var links_elements = svg.append("g").attr("id", "links");
-    var simulation = d3.forceSimulation().force("center", d3.forceCenter(svg_width / 2, 400)).force("collision", d3.forceCollide(10)).force("charge", d3.forceManyBody().distanceMax(50).distanceMin(10)).force("link", d3.forceLink().id(function (d) {
-        return d.sid;
-    }));
+    var simulation = d3.forceSimulation().force("center", d3.forceCenter(svg_width / 2, 400)).force("collision", d3.forceCollide(10)).force("charge", d3.forceManyBody().distanceMax(50).distanceMin(10));
     d3.json("data/fib-1.json", function (error, graph) {
         var circles = nodes_elements.selectAll("circle").data(graph.node).enter().append("circle").attr("cx", (svg_width / 2) + "px").attr("cy", (svg_height / 2) + "px").attr("r", "10px").attr("stroke", "transparent").attr("fill", "transparent").attr("id", function (d, i) {
             return d.sid;
@@ -209,7 +209,6 @@
             .on("drag", dragged)
             .on("end", dragended));
         var lines = links_elements.selectAll("line").data(graph.link).enter().append("line").attr("stroke", "transparent");
-
         function ticked() {
             circles.attr("cx", function (d) {
                 return d.x;
@@ -217,17 +216,23 @@
                 return d.y;
             });
             lines.attr("x1", function (d) {
-                return $("#" + d.source).attr("cx");
+                //return $("#" + d.source).attr("cx");
+                return d.source.x;
             }).attr("y1", function (d) {
-                return $("#" + d.source).attr("cy");
+                //return $("#" + d.source).attr("cy");
+                return d.source.y;
             }).attr("x2", function (d) {
-                return $("#" + d.target).attr("cx");
+                //return $("#" + d.target).attr("cx");
+                return d.target.x;
             }).attr("y2", function (d) {
-                return $("#" + d.target).attr("cy");
+                //return $("#" + d.target).attr("cy");
+                return d.target.y;
             });
         }
-
         simulation.nodes(graph.node).on("tick", ticked);
+        simulation.force("link", d3.forceLink().id(function (d) {
+            return d.sid;
+        }).links(graph.link));
         console.log(graph.node);
         function dragstarted(d) {
             if (!d3.event.active) simulation.alphaTarget(0.3).restart();
@@ -249,7 +254,7 @@
         var month = 0;
         setInterval(function () {
             ++month;
-            circles.transition().duration(400).attr("stroke", function (d, i) {
+            circles.transition().duration(changeDuration).attr("stroke", function (d, i) {
                 if (month == d.youmon) return "#e91e63";
                 else if (month < d.youmon) return "transparent";
                 else return "#2196f3";
@@ -258,11 +263,14 @@
                 else if (month < d.youmon) return "transparent";
                 else return "#90caf9";
             });
-            lines.transition().duration(400).attr("stroke", function (d, i) {
+            lines.attr("stroke", function (d, i) {
+                if (month <= d.youmon - 1) return "transparent";
+                else return "#ff9800";
+            }).transition().duration(changeDuration).attr("stroke", function (d, i) {
                 if (month <= d.youmon - 1) return "transparent";
                 else return "#b0bec5";
-            })
-        }, 1000);
+            });
+        }, changeDuration);
     });
 </script>
 </body>
