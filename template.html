@@ -13,7 +13,7 @@
             background: gray;
         }
     </style>
-    <script type="text/javascript">
+    <script type="text/javascript" src="lib/d3-4.7.1/d3.min.js">
     </script>
 </head>
 <body>
@@ -166,6 +166,9 @@
         // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
         $('.modal').modal();
     });
+</script>
+<script>
+    d3.select("body").append("svg").append("line").attr("x1", "10px").attr("y1", "10px").attr("x2", "100px").attr("y2", "100px").attr("stroke", "black");
 </script>
 <!--注意：涉及页面文本的修改要到json里面改-->
 </body>
