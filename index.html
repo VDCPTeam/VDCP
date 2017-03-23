@@ -1,9 +1,165 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
 <head>
+    <script type="text/javascript" src="lib/jquery-3.3.1/jquery-3.1.1.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script type="text/javascript" src="lib/materialize-0.97.8/js/materialize.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="lib/materialize-0.97.8/css/materialize.min.css">
     <meta charset="UTF-8">
+    <script type="text/javascript" async
+            src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
     <title></title>
 </head>
-<body>
+<body class="grey">
+<nav>
+    <div class="nav-wrapper light-blue z-depth-5" style="z-index: 10000">
+        <a href="#" class="brand-logo valign-wrapper"><img class="responsive-img valign" style="margin-top:18px;margin-left:10px;width: 214px;height: 34px" src="img/logo.png" /></a>
+    </div>
+</nav>
+<ul id="slide-out" class="side-nav z-depth-5">
+    <li>
+        <div class="container"><img class="responsive-img" src="img/logo.png" style="margin: 25px 0"></div>
+    </li>
+    <li>
+        <div class="container">
+            <div class="input-field">
+                <select id="select-language" onchange="selected_lang()">
+                    <option value="zh-cn" selected>简体中文</option>
+                    <option value="en">English</option>
+                </select>
+            </div>
+        </div>
+    </li>
+    <li>
+        <div class="divider"></div>
+    </li>
+    <li>
+        <div class="container"><span id="text-catalog"></span></div>
+    </li>
+    <li id="catalog">
+        <!--侧边栏内部折叠目录-->
+        <!--修改json-->
+        <ul class="collapsible" data-collapsible="accordion"></ul>
+    </li>
+</ul>
+<div class="fixed-action-btn"><button class="btn-floating btn-large waves-effect waves-light amber button-collapse" data-activates="slide-out" ><i class="material-icons">menu</i></button></div>
+<div class="row">
+    <div class="carousel carousel-slider center s12 m12 l12" data-indicators="true" style="height: 600px">
+        <div class="carousel-item light-blue darken-1 light-blue-text text-lighten-5 center" href="#one!">
+            <h1 id="text-fibonacci"></h1>
+            <p>$$A_1 = 1$$</p>
+            <p>$$A_2 = 1$$</p>
+            <p>$$A_n=A_{n+1}+A_{n+2}(n\geq2，n∈N*)$$</p>
+        </div>
+        <div class="carousel-item cyan darken-1 cyan-text text-lighten-5" href="#two!">
+            <h1 id="text-pascal"></h1>
+            <p>$$1$$</p>
+            <p>$$1, 2, 1$$</p>
+            <p>$$1, 3, 3, 1$$</p>
+            <p>$$1, 4, 6, 4, 1$$</p>
+            <p>$$1, 5, 10, 10, 5, 1$$</p>
+            <p>$$1, 6, 15, 20, 15, 6, 1$$</p>
+            <p>$$1, 7, 21, 35, 35, 21, 7, 1$$</p>
+            <p>$$1, 8, 28, 56, 70, 56, 28, 8, 1$$</p>
+        </div>
+        <div class="carousel-item teal darken-1 teal-text text-lighten-5" href="#three!">
+            <h1 id="text-nest"></h1>
+            <p>$${\displaystyle \left\lceil {\frac {n}{m}}\right\rceil }$$</p>
+        </div>
+        <div class="carousel-item blue darken-1 blue-text text-lighten-5" href="#four!">
+            <h1 id="text-pnc"></h1>
+            <p>$$A_{n}^{m}={\frac {m!}{(m-n)!}}$$</p>
+            <p>$$C_{k}^{n}={n \choose k}={\frac {P_{k}^{n}}{k!}}={\frac {n!}{k!(n-k)!}}$$</p>
+        </div>
+    </div>
+</div>
+<footer class="page-footer brown">
+    <div class="container">
+        <div class="row">
+            <div class="col l6 s12">
+                <h5 class="white-text">计数原理可视化设计</h5>
+                <p class="grey-text text-lighten-4">北京邮电大学软件学院</p>
+            </div>
+            <div class="col l4 offset-l2 s12">
+                <h5 class="white-text">成员</h5>
+                <ul>
+                    <li><a class="grey-text text-lighten-3" href="https://github.com/chenrz925">陈润泽</a></li>
+                    <li><a class="grey-text text-lighten-3" href="https://github.com/LHFData">廖海峰</a></li>
+                    <li><a class="grey-text text-lighten-3" href="https://github.com/rrookkie">范新龙</a></li>
+                    <li><a class="grey-text text-lighten-3" href="https://github.com/hanqingze">扎西南杰</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="footer-copyright">
+        <div class="container">
+            © 2017 Copyright TEAM_VDCP
+        </div>
+    </div>
+</footer>
+<script type="text/javascript">
+    var lang;
+    var isinitial = true;
+    $(document).ready(function () {
+        $('select').material_select();
+    });
+    var txt = document.cookie.split(";");
+    lang = $("#select-language").find("option:selected").val();
+    for (var i = 0; i < txt.length; i++) {
+        if (txt[i].match("\{.*\}")) {
+            lang = JSON.parse(txt[i]).lang;
+        }
+    }
+    $(".button-collapse").sideNav({
+        draggable: true
+    });
+    function catalog_id(sect, exam) {
+        return "s" + sect + "e" + exam + "id";
+    }
+    function selected_lang() {
+        if (!isinitial) {
+            lang = $("#select-language").find("option:selected").val();
+        } else isinitial = false;
+        $.getJSON("text/index/" + lang + ".json", function (data) {
+            $("#text-catalog").html(data.catalog);
+            $("#text-fibonacci").html(data.fibonacci);
+            $("#text-nest").html(data.nest);
+            $("#text-pascal").html(data.pascal);
+            $("#text-pnc").html(data.pnc);
+            document.title = data.title;
+            $(document).ready(function () {
+                $('.tooltipped').tooltip({delay: 50});
+            });
+        });
+        $.getJSON("catalog/" + lang + ".json", function (data) {
+            $("#catalog .collapsible").remove();
+            $("#catalog").append("<ul class='collapsible' data-collapsible='accordion'></ul>");
+            var co_wrapper = $("#catalog .collapsible");
+            for (var i = 0; i < data.length; i++) {
+                var temp_li = co_wrapper.append("<li id='" + catalog_id(i, 0) + "'></li>");
+                temp_li.find("#" + catalog_id(i, 0)).append("<div class='collapsible-header'><a class='waves-effect btn-flat' href='" + data[i].href + "'>" + data[i].text + "</a></div>");
+                var temp_inner = temp_li.find("#" + catalog_id(i, 0)).append("<div class='collapsible-body'></div>");
+                if (data[i].child != undefined) {
+                    var temp_colle = temp_inner.find(".collapsible-body").append("<div class='collection'></div>");
+                    for (var j = 0; j < data[i].child.length; j++) {
+                        temp_colle.find(".collection").append("<a href='" + data[i].child[j].href.slice(3) + "' class='collection-item waves-effect btn-flat'>" + data[i].child[j].text + "</a>");
+                    }
+                }
+            }
+            $(document).ready(function () {
+                $('.collapsible').collapsible();
+            });
+        });
+        document.cookie = JSON.stringify({"lang": lang});
+    }
+    selected_lang();
+    $(document).ready(function(){
+        $('.carousel').carousel({
+            time_constant:1000,
+            no_wrap: false
+        });
+    });
+</script>
 </body>
 </html>
