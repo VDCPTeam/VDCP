@@ -9,6 +9,7 @@
     <script src="../lib/materialize-0.97.8/js/materialize.min.js"></script>
     <link rel="stylesheet" href="../lib/materialize-0.97.8/css/materialize.min.css"/>
     <script src="../lib/d3-4.7.1/d3.min.js"></script>
+    <script src="../lib/MathJax/MathJax.js?config=TeX-MML-AM_HTMLorMML"></script>
     <style type="text/css">
         body {
             background: gray;
@@ -22,10 +23,12 @@
             <g id="expr">
                 <rect x="200px" y="200px" height="80px" width="160px" stroke="#ff9800" fill="#ffcc80" rx="10px"
                       ry="10px" id="left"></rect>
+                <text id="index1" x="380px" y="240px" font-size="16px"></text>
                 <text x="210px" y="260px" font-size="40px" stroke="transparent" fill="transparent"
                       id="left-text"></text>
                 <rect x="200px" y="300px" height="80px" width="160px" stroke="#ff9800" fill="#ffcc80" rx="10px"
                       ry="10px" id="right"></rect>
+                <text id="index2" x="380px" y="340px" font-size="16px"></text>
                 <text x="210px" y="360px" font-size="40px" stroke="transparent" fill="transparent"
                       id="right-text"></text>
                 <text font-size="32px" x="160px" y="350px" stroke="#263238" fill="#263238">+</text>
@@ -33,6 +36,7 @@
                       fill="#263238"></line>
                 <rect x="200px" y="420px" height="80px" width="160px" stroke="#ff9800" fill="#ffcc80" rx="10px"
                       ry="10px" id="result"></rect>
+                <text id="index3" x="380px" y="460px" font-size="16px"></text>
                 <text x="210px" y="480px" font-size="40px" stroke="transparent" fill="transparent"
                       id="result-text"></text>
             </g>
@@ -117,19 +121,20 @@
 <div id="info-modal" class="modal blue lighten-3">
     <div class="modal-content">
         <h4 id="text-modal-info"></h4>
-        <div id="text-fib-1-info"></div>
+        <div id="text-fib-2-info"></div>
     </div>
     <div class="modal-footer">
         <button class=" modal-action modal-close waves-effect waves-green btn-flat text-yes"></button>
+        <a href="fib-3.html" class="modal-action modal-close waves-effect waves-green btn-flat text-next"></a>
     </div>
 </div>
 <div id="help-modal" class="modal orange lighten-3">
     <div class="modal-content">
         <h4 id="text-modal-help"></h4>
-        <div id="fib-1-help"></div>
+        <div id="fib-2-help"></div>
     </div>
     <div class="modal-footer">
-        <a href="fib-2.html" class=" modal-action modal-close waves-effect waves-green btn-flat text-next"></a>
+        <button class=" modal-action modal-close waves-effect waves-green btn-flat text-yes"></button>
     </div>
 </div>
 <!--注意：涉及页面文本的修改要到json里面改-->
@@ -187,8 +192,8 @@
             $(".text-yes").html(data.yes);
             $("#text-modal-info").html(data.modal_info);
             $("#text-modal-help").html(data.modal_help);
-            $("#text-fib-1-info").html(data.fib_1_info);
-            $("#fib-1-help").html(data.fib_1_help);
+            $("#text-fib-2-info").html(data.fib_2_info);
+            $("#fib-2-help").html(data.fib_2_help);
             $(".text-next").html(data.next);
             document.title = data.fib_2_title;
             /**
@@ -229,6 +234,12 @@
 <!--开始本页内容-->
 <script type="text/javascript">
     var expr_counter = 0;
+    setTimeout(function () {
+        $("#help-modal").modal("open");
+    }, 100);
+    setTimeout(function () {
+        $("#info-modal").modal("close");
+    }, 2000);
     /**
      * 拖拽交互
      */
@@ -239,6 +250,9 @@
     }
     function useable_done(b) {
         d3.select("#done").classed("disabled", !b);
+        if (expr_counter > 9) {
+            $("#info-modal").modal("open");
+        }
     }
     function distance(x1, y1, x2, y2) {
         return Math.abs(Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)));
@@ -248,6 +262,7 @@
         for (var rf = 0; rf < 3; ++rf) {
             d3.select("g#ch" + (rf + 1)).select("rect").attr("x", (20 + rf * 180) + "px").attr("y", "600px");
             d3.select("g#ch" + (rf + 1)).select("text").attr("x", (30 + rf * 180) + "px").attr("y", "640px");
+            d3.select("#index" + (rf + 1)).text("(" + (rf + expr_counter + 1) + ")");
         }
         d3.select("#left").attr("fill", "#ffcc80").attr("stroke", "#ff9800");
         d3.select("#left-text").text("").attr("fill", "transparent").attr("stroke", "transparent");
@@ -360,16 +375,6 @@
     /**
      * 力布局展示数列
      */
-    var svg = d3.select("svg");
-    var seq = svg.append("g").attr("id", "seq");
-    var simu = d3.forceSimulation().force("link", d3.forceLink().id(function (d, i) {
-        return i;
-    })).force("center", d3.forceCenter(250, 100)).force("collide", d3.forceCollide(30));
-    d3.json("data/fib-2.json", function (e, g) {
-        d3.select("#seq").selectAll("text").data(g).enter().append("text").attr("font-size", "18px").attr("x", "300px").attr("y", "100px").text(function (d, i) {
-            return "" + d.left;
-        });
-    });
 </script>
 </body>
 </html>
