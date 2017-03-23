@@ -12,14 +12,24 @@
         "href": "../fib/fib-1.html"
       },
       {
-        "text": "测试3",
-        "href": "#test3"
+        "text": "斐波那契-运算",
+        "href": "../fib/fib-2.html"
       }
     ]
   },
   {
     "text": "排列组合",
-    "href": "#2"
+    "href": "#2",
+    "child": [
+      {
+        "text": "test1",
+        "href": "#"
+      },
+      {
+        "text": "test2",
+        "href": "#!"
+      }
+    ]
   },
   {
     "text": "鸽巢原理",
