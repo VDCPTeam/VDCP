@@ -1,7 +1,7 @@
 [
   {
     "text": "斐波那契数列",
-    "href": "#1",
+    "href": "#",
     "child": [
       {
         "text": "兔子的数目-引言",
@@ -18,25 +18,25 @@
     ]
   },
   {
-    "text": "排列组合",
-    "href": "#2",
+    "text": "鸽巢原理",
+    "href": "#"
+  },
+  {
+    "text": "杨辉三角",
+    "href": "#",
     "child": [
       {
-        "text": "test1",
-        "href": "#"
+        "text": "杨辉三角-一",
+        "href": "../pas/pas-0.html"
       },
       {
-        "text": "test2",
-        "href": "#!"
+        "text": "杨辉三角-二",
+        "href": "../pas/pas-1.html"
       }
     ]
   },
   {
-    "text": "鸽巢原理",
-    "href": "#3"
-  },
-  {
-    "text": "杨辉三角",
-    "href": "#4"
+    "text": "排列组合",
+    "href": ""
   }
 ]

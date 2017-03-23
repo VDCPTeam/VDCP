@@ -25,5 +25,11 @@
   ],
   "fib_2_title": "斐波那契-运算",
   "fib_2_info": "<div><span>斐波那契数列有一个基本特性，即数列的每一位为前两项之和，即满足\n$$a_n=a_{n+1}+a_{n+2}$$",
-  "fib_2_help": "<div>请拖拽<span class='lime-text orange darken-3'>青绿色</span>数字至对应位置以完成算式。</div>"
+  "fib_2_help": "<div>请拖拽<span class='lime-text orange darken-3'>青绿色</span>数字至对应位置以完成算式。</div>",
+  "pas_start": "开始",
+  "pas_back": "刷新",
+  "pas_loc": "显示位置",
+  "pas_rela": "显示关系",
+  "pas_0_title": "杨辉三角-一",
+  "pas_1_title": "杨辉三角-二"
 }

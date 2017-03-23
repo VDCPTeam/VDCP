@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <!--标题栏-->
+    <title>杨辉三角-1</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="../lib/jquery-3.3.1/jquery-3.1.1.min.js"></script>
+    <script src="../lib/materialize-0.97.8/js/materialize.min.js"></script>
+    <link rel="stylesheet" href="../lib/materialize-0.97.8/css/materialize.min.css"/>
+    <script src="../lib/d3-4.7.1/d3.min.js"></script>
+    <style type="text/css">
+        body {
+            background: gray;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <svg class="col s10 m10 l10 grey lighten-5 z-depth-5" id="svg-content" style="height: 800px">
+        </svg>
+		<div class="col s2 m2 l2 grey lighten-3 z-depth-5" style="height: 800px">
+		   <a class="waves-effect waves-light btn-large text-pas-start" onclick="start()" style="width: 160px">Start</a>
+           <a class="waves-effect waves-light btn-large text-pas-back" onclick="back()" style="width: 160px">Back</a>
+           <a class="waves-effect waves-light btn-large text-pas-loc" onclick="coordinate()" style="width: 160px">Location</a>
+		   <a class="waves-effect waves-light btn-large text-pas-rela" onclick="relation()" style="width: 160px">Relation</a>
+		</div>
+    </div>
+</div>
+<!--侧边栏-->
+<ul id="slide-out" class="side-nav z-depth-5">
+    <li>
+        <div class="container"><img class="responsive-img" src="../img/logo.png" style="margin: 25px 0"></div>
+    </li>
+    <li>
+        <div class="container">
+            <div class="input-field">
+                <select id="select-language" onchange="selected_lang()">
+                    <option value="zh-cn" selected>简体中文</option>
+                    <option value="en">English</option>
+                </select>
+            </div>
+        </div>
+    </li>
+    <li>
+        <div class="divider"></div>
+    </li>
+    <li>
+        <div class="container"><span id="text-catalog"></span></div>
+    </li>
+    <li id="catalog">
+        <!--侧边栏内部折叠目录-->
+        <!--修改json-->
+        <ul class="collapsible" data-collapsible="accordion"></ul>
+    </li>
+</ul>
+<!--底部按钮-->
+<div class="fixed-action-btn toolbar">
+    <a class="btn-floating btn-large cyan">
+        <i class="large material-icons">menu</i>
+    </a>
+    <ul>
+        <li class="waves-effect waves-light"><a href="#!" class="tooltipped button-collapse" data-activates="slide-out"
+                                                id="text-tooltip-sidenav" data-position="top" data-delay="50"><i
+                class="material-icons">pageview</i></a></li>
+        <li class="waves-effect waves-light"><a href="#info-modal" class="tooltipped" id="text-tooltip-info"
+                                                data-position="top" data-delay="50"><i
+                class="material-icons">info</i></a></li>
+        <li class="waves-effect waves-light"><a href="#help-modal" class="tooltipped" id="text-tooltip-help"
+                                                data-position="top" data-delay="50"><i
+                class="material-icons">live_help</i></a></li>
+    </ul>
+</div>
+<!--信息及帮助-->
+<div id="info-modal" class="modal blue lighten-3">
+    <div class="modal-content">
+        <h4 id="text-modal-info"></h4>
+        <div id="text-fib-0-info"></div>
+    </div>
+    <div class="modal-footer">
+        <a href="fib-1.html" class=" modal-action modal-close waves-effect waves-green btn-flat text-next"></a>
+    </div>
+</div>
+<div id="help-modal" class="modal orange lighten-3">
+    <div class="modal-content">
+        <h4 id="text-modal-help"></h4>
+        <div id="text-fib-0-help"></div>
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat text-yes"></a>
+    </div>
+</div>
+<!--注意：涉及页面文本的修改要到json里面改-->
+<script type="text/javascript">
+    /**
+     * 控制侧边栏
+     */
+    $(".button-collapse").sideNav({
+        draggable: true
+    });
+    var isopen = true;
+    function switchnav() {
+        if (isopen) {
+            isopen = false;
+            $(".button-collapse").sideNav("show");
+        }
+        else {
+            isopen = true;
+            $(".button-collapse").sideNav("hide");
+        }
+    }
+    /**
+     * 控制多语言及文本
+     */
+    var lang;
+    var isinitial = true;
+    var fib_0_intro;
+    var next;
+    $(document).ready(function () {
+        $('select').material_select();
+    });
+    var txt = document.cookie.split(";");
+    lang = $("#select-language").find("option:selected").val();
+    var textjson;
+    for (var i = 0; i < txt.length; i++) {
+        if (txt[i].match("\{.*\}")) {
+            lang = JSON.parse(txt[i]).lang;
+        }
+    }
+    function catalog_id(sect, exam) {
+        return "s" + sect + "e" + exam + "id";
+    }
+    function selected_lang() {
+        if (!isinitial) {
+            lang = $("#select-language").find("option:selected").val();
+        } else isinitial = false;
+        $.getJSON("../text/" + lang + ".json", function (data) {
+            /**
+             * 注意：
+             * 每一个文本信息在json中储存后，
+             * 都要在如下部分注册，
+             * 先后顺序不产生影响。
+             */
+            textjson = data;
+            $("#text-catalog").html(data.catalog);
+            $("#text-tooltip-sidenav").attr("data-tooltip", data.tooltip_sidenav);
+            $("#text-tooltip-help").attr("data-tooltip", data.tooltip_help);
+            $("#text-tooltip-info").attr("data-tooltip", data.tooltip_info);
+            $(".text-yes").html(data.yes);
+            $("#text-modal-info").html(data.modal_info);
+            $("#text-modal-help").html(data.modal_help);
+            $(".text-pas-start").html(data.pas_start);
+            $(".text-pas-rela").html(data.pas_rela);
+            $(".text-pas-loc").html(data.pas_loc);
+            $(".text-pas-back").html(data.pas_back);
+            $(".text-next").html(data.next);
+            document.title = data.pas_0_title;
+            /**
+             * 到这里结束
+             */
+            $(document).ready(function () {
+                $('.tooltipped').tooltip({delay: 50});
+            });
+        });
+        $.getJSON("../catalog/" + lang + ".json", function (data) {
+            $("#catalog .collapsible").remove();
+            $("#catalog").append("<ul class='collapsible' data-collapsible='accordion'></ul>");
+            var co_wrapper = $("#catalog .collapsible");
+            for (var i = 0; i < data.length; i++) {
+                var temp_li = co_wrapper.append("<li id='" + catalog_id(i, 0) + "'></li>");
+                temp_li.find("#" + catalog_id(i, 0)).append("<div class='collapsible-header'><a class='waves-effect btn-flat' href='" + data[i].href + "'>" + data[i].text + "</a></div>");
+                var temp_inner = temp_li.find("#" + catalog_id(i, 0)).append("<div class='collapsible-body'></div>");
+                if (data[i].child != undefined) {
+                    var temp_colle = temp_inner.find(".collapsible-body").append("<div class='collection'></div>");
+                    for (var j = 0; j < data[i].child.length; j++) {
+                        temp_colle.find(".collection").append("<a href='" + data[i].child[j].href + "' class='collection-item waves-effect btn-flat'>" + data[i].child[j].text + "</a>");
+                    }
+                }
+            }
+            $(document).ready(function () {
+                $('.collapsible').collapsible();
+            });
+        });
+        document.cookie = JSON.stringify({"lang": lang});
+    }
+    selected_lang();
+    $(document).ready(function () {
+        // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
+        $('.modal').modal();
+    });
+</script>
+<!--开始本页内容-->
+<script>
+    var height=800;
+    var width=1080;
+    var svg=d3.select("svg");
+	    svg.call(d3.zoom()
+         .scaleExtent([1 / 10, 8])
+         .on("zoom", zoomed));
+    var elementMarginY = Math.round(height / 14);
+    var topMargin = Math.round(height * 0.07);
+	var g = svg.append("g");
+    
+	function zoomed() {
+      g.attr("transform", d3.event.transform);
+    }
+	var fiData = new Array();
+    for (var i=1;i<=200;i++){
+      fiData[i]=new Array();
+       for (var j=1;j<=i;j++){
+         fiData[i][j]=1;
+     }
+   }
+   fiData[1][1]=1;
+   fiData[2][1]=1;
+   fiData[2][2]=1;
+   for (var i = 3; i <= 200; i++)
+     for (var j=2; j<i; j++) {
+    fiData[i][j]=fiData[i-1][j-1]+fiData[i-1][j];
+   }
+   var data=new Array();
+   var data2=new Array();
+   for(var i=1,m=0;i<=150;i++)
+    for(var j=1;j<=i;j++){
+		 data[m]=fiData[i][j];
+		 var object={
+		     i:i,	 
+			 j:j,
+		  }
+		 data2[m]=object; 
+		 m++;
+    }
+    //生成元素的位置
+    function elementPosition(i,j) {// 输出元素位置
+    var result = {
+        i: i,
+        j: j,
+        x: 0,
+        y: 0,
+
+    }
+    result.y = Math.round(topMargin + elementMarginY * i);
+    if (i%2==0) {result.x = Math.round(width/2 - Math.round(Math.round(width / 15)/2)+ (j-parseInt(i/2))*Math.round(width/15) ); }
+    else {result.x=Math.round(width / 2 + (j-1-parseInt(i/2))*Math.round(width/15));}
+    
+	return result;
+   }
+	function position(t){       //输入第几个元素，输出元素位置
+	  return elementPosition(data2[t].i,data2[t].j);
+	}
+	function oppoposition(i,j){ //输入i,j坐标，输出第几个元素
+	  for(var k=0;;k++)
+	   if(data2[k].i==i&&data2[k].j==j) return k;
+	}
+	function positionPath1(t){          //右边
+      return elementPosition(data2[t].i-1,data2[t].j);
+	}
+	function positionPath2(t){           //左边
+	  return elementPosition(data2[t].i-1,data2[t].j-1);
+	}
+	function fillColor(d, i) {
+      var color = d % 0xffffff;
+      var RmG = Math.round(color / 0xffff) - Math.round(color % 0xffff / 0xff);
+      var GmB = Math.round(color % 0xffff / 0xff) - Math.round(color % 0xff);
+      var BmR = Math.round(color % 0xff) - Math.round(color / 0xffff);
+          color += Math.round(RmG * 0xffff + GmB * 0xff + BmR);
+          color = color > 0xffffff ? color % 0xffffff : (color < 0x000000 ? color + 0xffffff : color);
+     switch (color.toString(18).length) {
+        case 0:
+            return "#000000";
+        case 1:
+            return "#00" + color.toString(16) + "00" + color.toString(16);
+        case 2:
+            return "#" + color.toString(16) + color.toString(16) + color.toString(16);
+        case 3:
+            return "#00" + color.toString(16) + "0" + color.toString(16);
+        case 4:
+            return "#00" + color.toString(16);
+        case 5:
+            return "#0" + color.toString(16);
+        case 6:
+            return "#" + color.toString(16);
+        default:
+            return "#000000";
+     }
+   }
+    function render(){
+	    //画圆
+        var updateA=d3.select("g").selectAll("circle").data(data);
+        var enterA=updateA.enter();
+        enterA.append("circle")
+	    .attr("r", "18px")
+        .attr("cx", function (d, i) {
+			return position(i).x + "px";
+        })
+        .attr("cy", function (d, i) {
+            return position(i).y + "px";
+        })
+        .attr("fill",function(d,i){
+		    return fillColor(d,i);
+		})
+        .attr("id",function(d,i){
+             return i;
+        })
+        .transition()
+        .duration(1000)
+    }
+	render();
+	function render2(t){
+	//填数 
+		var updateA=d3.select("g").selectAll("text1").data(data.slice(0,t));
+        var enterA=updateA.enter();
+        enterA.append("text")
+		.transition().duration(3000)
+        .text(function (d, i) {
+            if(i>=t-1)return d;
+        })
+        .attr("x", function (d, i) {
+            return position(i).x -7 + "px";
+        })
+        .attr("y", function (d, i) {
+            return (position(i).y + 11) + "px";
+        })
+        .style("font-size", Math.round(height * 0.025) + "px")
+	}
+	function render3(t){
+	   //画路径
+		var updateA=d3.select("g").selectAll("line1").data(data.slice(0,t));
+        var enterA=updateA.enter();
+        enterA.append("line")
+		.transition().duration(1000)
+		.attr("x1",function(d,i){
+		  if(data[i]!=1&&i>=t-1)  return position(i).x + "px";
+		})
+		.attr("y1",function(d,i){
+		  if(data[i]!=1&&i>=t-1) return position(i).y + "px";
+		})
+		.attr("x2",function(d,i){
+		  if(data[i]!=1&&i>=t-1) return positionPath1(i).x - 10;
+		})
+		.attr("y2",function(d,i){
+		  if(data[i]!=1&&i>=t-1) return positionPath1(i).y + 10;
+		})
+		
+	    .style("stroke", function (d, i) {
+           if(i>=t-1) return fillColor(d, i);
+        })
+		.style("fill", "none")
+		.style("stroke-width", (1 + Math.round(height / 400)).toString())
+		
+		//左边
+		var updateB=d3.select("g").selectAll("line2").data(data.slice(0,t));
+        var enterB=updateB.enter();
+        enterB.append("line")
+		.transition().duration(1000)
+		.attr("x1",function(d,i){
+		  if(data[i]!=1&&i>=t-1) return position(i).x - 5 + "px";
+		})
+		.attr("y1",function(d,i){
+		  if(data[i]!=1&&i>=t-1) return position(i).y - 7 + "px";
+		})
+		.attr("x2",function(d,i){
+		  if(data[i]!=1&&i>=t-1) return positionPath2(i).x + 6;
+		})
+		.attr("y2",function(d,i){
+		  if(data[i]!=1&&i>=t-1) return positionPath2(i).y + 9;
+		})
+		
+	    .style("stroke", function (d, i) {
+           if(i>=t-1) return fillColor(d, i);
+        })
+		.style("fill", "none")
+		.style("stroke-width", (1 + Math.round(height / 400)).toString())
+	}
+    
+	function render4(){
+	    var updateB=d3.select("g").selectAll("text2").data(data2);
+        var enterB=updateB.enter();
+        enterB.append("text")
+        .text(function (d, i) {
+            return ("["+d.i+","+d.j+"]");
+        })
+        .attr("x", function (d, i) {
+            return position(i).x -15 + "px";
+        })
+        .attr("y", function (d, i) {
+            return (position(i).y + 29) + "px";
+        })
+        .style("font-size", Math.round(height * 0.015) + "px")
+		.attr("id",function(d,i){
+             return "text2"+i;
+        })
+	}    
+	function hover() {
+       $("circle").mouseenter(
+	     function(){
+           var idd= $(this).attr("id");
+		   $(this)
+		     .attr("r", function (){
+                 var r;
+                 r = 23;
+                 return r + "px";
+             })
+			 .css("stroke", "red")
+		   if(data[idd]!=1){
+		   idd=oppoposition(data2[idd].i-1,data2[idd].j);
+		   $("#"+idd)
+		     .attr("r", function (){
+                 var r;
+                 r = 23;
+                 return r + "px";
+             })
+			 .css("stroke", "red")
+		   idd=oppoposition(data2[idd].i,data2[idd].j-1);
+		   $("#"+idd)
+		     .attr("r", function (){
+                 var r;
+                 r = 23;
+                 return r + "px";
+             })
+			 .css("stroke", "red")
+			 }	 
+         }
+	   );
+	   $("circle").mouseleave(
+	    function(){
+           $(this)
+		     .attr("r", function (){
+                 var r;
+                 r = 18;
+                 return r + "px";
+             })
+			 .css("stroke", "white")
+		   var idd= $(this).attr("id"); 
+		     if(data[idd]!=1){ 
+			   idd=oppoposition(data2[idd].i-1,data2[idd].j);
+		       $("#"+idd)
+		        .attr("r", function (){
+                   var r;
+                   r = 18;
+                   return r + "px";
+                })
+			    .css("stroke", "white")
+			   idd=oppoposition(data2[idd].i,data2[idd].j-1);
+		       $("#"+idd)
+		        .attr("r", function (){
+                   var r;
+                   r = 18;
+                   return r + "px";
+                })
+			    .css("stroke", "white")	
+			 }
+        });	 
+    }
+	var id; 
+	function start(){//按键事件监听器,开始
+	  var k=1;
+	  id=setInterval(function lop(){
+	     render2(k);
+		 render3(k);
+		 k++;
+	  },1000)
+	  $("#start").attr("disabled", true);
+    }
+    function back(){//还原画面
+       window.clearInterval(id);	
+        svg.selectAll("text").remove();
+        svg.selectAll("line").remove();
+        render();
+		$("#start").attr("disabled", false);
+		$("#coordinate").attr("disabled", false);
+    }
+	function relation(){
+	    hover();
+	}
+	function coordinate(){ 	
+		render4(); 
+		$("#coordinate").attr("disabled", true);
+	}
+    </script>
+</body>
+</html>
