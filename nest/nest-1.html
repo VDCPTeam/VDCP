@@ -60,6 +60,8 @@
         <i class="large material-icons">menu</i>
     </a>
     <ul>
+        <li class="waves-effect waves-light"><a href="../" class="tooltipped" id="text-tooltip-home"><i
+                class="material-icons">view_carousel</i></a></li>
         <li class="waves-effect waves-light"><a href="#!" class="tooltipped button-collapse" data-activates="slide-out"
                                                 id="text-tooltip-sidenav" data-position="top" data-delay="50"><i
                 class="material-icons">pageview</i></a></li>
@@ -146,6 +148,7 @@
             $("#text-tooltip-sidenav").attr("data-tooltip", data.tooltip_sidenav);
             $("#text-tooltip-help").attr("data-tooltip", data.tooltip_help);
             $("#text-tooltip-info").attr("data-tooltip", data.tooltip_info);
+            $("#text-tooltip-home").attr("data-tooltip", data.tooltip_home);
             $(".text-yes").html(data.yes);
             $("#text-modal-info").html(data.modal_info);
             $("#text-modal-help").html(data.modal_help);
