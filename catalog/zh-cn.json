@@ -19,7 +19,17 @@
   },
   {
     "text": "鸽巢原理",
-    "href": "#"
+    "href": "#",
+    "child": [
+      {
+        "text": "鸽巢原理-展示",
+        "href": "../nest/nest-0.html"
+      },
+      {
+        "text": "六人问题",
+        "href": "../nest/nest-1.html"
+      }
+    ]
   },
   {
     "text": "杨辉三角",

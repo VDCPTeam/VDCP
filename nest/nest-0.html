@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <!--标题栏-->
+    <title>template</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="../lib/jquery-3.3.1/jquery-3.1.1.min.js"></script>
+    <script src="../lib/materialize-0.97.8/js/materialize.min.js"></script>
+    <link rel="stylesheet" href="../lib/materialize-0.97.8/css/materialize.min.css"/>
+    <script src="../lib/d3-4.7.1/d3.min.js"></script>
+    <style type="text/css">
+        body {
+            background: gray;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <svg class="col s10 m10 l10 grey lighten-5 z-depth-5" id="svg-content" style="height: 800px">
+        </svg>
+
+        <div class="col s2 m2 l2 blue-grey offset-s10 lighten-5 z-depth-5 valign-wrapper" id="svg-control"
+             style="height: 800px; z-index:-1">
+            <a class="btn-floating btn-large waves-effect waves-light red" onclick="start()"><i class="material-icons">play_arrow</i></a>
+            <a class="btn-floating btn-large waves-effect waves-light blue" href="nest-0.html"><i
+                    class="material-icons">replay</i></a>
+        </div>
+    </div>
+
+</div>
+<!--侧边栏-->
+<ul id="slide-out" class="side-nav z-depth-5">
+    <li>
+        <div class="container"><img class="responsive-img" src="../img/logo.png" style="margin: 25px 0"></div>
+    </li>
+    <li>
+        <div class="container">
+            <div class="input-field">
+                <select id="select-language" onchange="selected_lang()">
+                    <option value="zh-cn" selected>简体中文</option>
+                    <option value="en">English</option>
+                </select>
+            </div>
+        </div>
+    </li>
+    <li>
+        <div class="divider"></div>
+    </li>
+    <li>
+        <div class="container"><span id="text-catalog"></span></div>
+    </li>
+    <li id="catalog">
+        <!--侧边栏内部折叠目录-->
+        <!--修改json-->
+        <ul class="collapsible" data-collapsible="accordion"></ul>
+    </li>
+</ul>
+<!--底部按钮-->
+<div class="fixed-action-btn toolbar">
+    <a class="btn-floating btn-large cyan">
+        <i class="large material-icons">menu</i>
+    </a>
+    <ul>
+        <li class="waves-effect waves-light"><a href="#!" class="tooltipped button-collapse" data-activates="slide-out"
+                                                id="text-tooltip-sidenav" data-position="top" data-delay="50"><i
+                class="material-icons">pageview</i></a></li>
+        <li class="waves-effect waves-light"><a href="#info-modal" class="tooltipped" id="text-tooltip-info"
+                                                data-position="top" data-delay="50"><i
+                class="material-icons">info</i></a></li>
+        <li class="waves-effect waves-light"><a href="#help-modal" class="tooltipped" id="text-tooltip-help"
+                                                data-position="top" data-delay="50"><i
+                class="material-icons">live_help</i></a></li>
+    </ul>
+</div>
+<!--信息及帮助-->
+<div id="info-modal" class="modal blue lighten-3">
+    <div class="modal-content">
+        <h4 id="text-modal-info"></h4>
+        <div id="text-nest-0-info"></div>
+    </div>
+    <div class="modal-footer">
+        <a href="#！" class=" modal-action modal-close waves-effect waves-green btn-flat text-next"></a>
+    </div>
+</div>
+<div id="help-modal" class="modal orange lighten-3">
+    <div class="modal-content">
+        <h4 id="text-modal-help"></h4>
+        <div id="text-nest-0-help"></div>
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat text-yes"></a>
+    </div>
+</div>
+<!--注意：涉及页面文本的修改要到json里面改-->
+<script type="text/javascript">
+    /**
+     * 控制侧边栏
+     */
+    $(".button-collapse").sideNav({
+        draggable: true
+    });
+    var isopen = true;
+    function switchnav() {
+        if (isopen) {
+            isopen = false;
+            $(".button-collapse").sideNav("show");
+        }
+        else {
+            isopen = true;
+            $(".button-collapse").sideNav("hide");
+        }
+    }
+    /**
+     * 控制多语言及文本
+     */
+    var lang;
+    var isinitial = true;
+    var fib_0_intro;
+    var next;
+    $(document).ready(function () {
+        $('select').material_select();
+    });
+    var txt = document.cookie.split(";");
+    lang = $("#select-language").find("option:selected").val();
+    var textjson;
+    for (var i = 0; i < txt.length; i++) {
+        if (txt[i].match("\{.*\}")) {
+            lang = JSON.parse(txt[i]).lang;
+        }
+    }
+    function catalog_id(sect, exam) {
+        return "s" + sect + "e" + exam + "id";
+    }
+    function selected_lang() {
+        if (!isinitial) {
+            lang = $("#select-language").find("option:selected").val();
+        } else isinitial = false;
+        $.getJSON("../text/" + lang + ".json", function (data) {
+            /**
+             * 注意：
+             * 每一个文本信息在json中储存后，
+             * 都要在如下部分注册，
+             * 先后顺序不产生影响。
+             */
+            $("#text-catalog").html(data.catalog);
+            $("#text-tooltip-sidenav").attr("data-tooltip", data.tooltip_sidenav);
+            $("#text-tooltip-help").attr("data-tooltip", data.tooltip_help);
+            $("#text-tooltip-info").attr("data-tooltip", data.tooltip_info);
+            $(".text-yes").html(data.yes);
+            $("#text-modal-info").html(data.modal_info);
+            $("#text-modal-help").html(data.modal_help);
+            $("#text-nest-0-info").html(data.nest_0_info);
+            $("#text-nest-0-help").html(data.nest_0_help);
+            $(".text-next").html(data.next);
+            document.title = data.nest_0_title;
+            /**
+             * 到这里结束
+             */
+            $(document).ready(function () {
+                $('.tooltipped').tooltip({delay: 50});
+            });
+        });
+        $.getJSON("../catalog/" + lang + ".json", function (data) {
+            $("#catalog .collapsible").remove();
+            $("#catalog").append("<ul class='collapsible' data-collapsible='accordion'></ul>");
+            var co_wrapper = $("#catalog .collapsible");
+            for (var i = 0; i < data.length; i++) {
+                var temp_li = co_wrapper.append("<li id='" + catalog_id(i, 0) + "'></li>");
+                temp_li.find("#" + catalog_id(i, 0)).append("<div class='collapsible-header'><a class='waves-effect btn-flat' href='" + data[i].href + "'>" + data[i].text + "</a></div>");
+                var temp_inner = temp_li.find("#" + catalog_id(i, 0)).append("<div class='collapsible-body'></div>");
+                if (data[i].child != undefined) {
+                    var temp_colle = temp_inner.find(".collapsible-body").append("<div class='collection'></div>");
+                    for (var j = 0; j < data[i].child.length; j++) {
+                        temp_colle.find(".collection").append("<a href='" + data[i].child[j].href + "' class='collection-item waves-effect btn-flat'>" + data[i].child[j].text + "</a>");
+                    }
+                }
+            }
+            $(document).ready(function () {
+                $('.collapsible').collapsible();
+            });
+        });
+        document.cookie = JSON.stringify({"lang": lang});
+    }
+    selected_lang();
+    $(document).ready(function () {
+        // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
+        $('.modal').modal();
+    });
+</script>
+<script>
+    setTimeout(function () {
+        $("#info-modal").modal('open');
+    }, 100);
+    setTimeout(function () {
+        $("#info-modal").modal('close');
+    }, 5000);
+    setTimeout(function () {
+        $("#help-modal").modal('open');
+    }, 6000);
+
+    setTimeout(function () {
+        $.getJSON("../text/" + lang + ".json", function (data) {
+            console.log(data.nest_0_toast);
+            Materialize.toast(data.nest_0_toast, 5000);
+        });
+    }, 11000);
+    setTimeout(function () {
+        $.getJSON("../text/" + lang + ".json", function (data) {
+            console.log(data.nest_0_toast_alert);
+            Materialize.toast(data.nest_0_toast_alert[0] + BallNum + data.nest_0_toast_alert[1], 3000);
+        });
+    }, 7000);
+    var BoxNum = 5;
+    //document.getElementById("num").value;
+    var svg = d3.select("svg");
+    var SWidth = 900;
+    var SHeight = 800;
+
+    var BallNum = BoxNum + Math.floor(Math.random() * 3);
+    var Box = new Array(BoxNum);
+    var Ball = new Array(BallNum);
+    for (var i = 0; i < BoxNum; i++)Box[i] = 0;
+    for (var i = 0; i < BallNum; i++)Ball[i] = 1;
+    //容置
+    var circle = svg.selectAll("circle").data(Ball).enter()
+        .append("circle")
+        .attr("r", 0)
+        .attr("cx", SWidth / 8)
+        .attr("cy", SHeight / 4)
+        .attr("fill", "black")
+        .attr("class", function (d, i) {
+            return "circle_" + i;
+        });
+    circle
+        .transition()
+        .ease(d3.easeLinear)
+        .duration(1000)
+        .attr("r", 25)
+        .transition()
+        .ease(d3.easeLinear)
+        .duration(1000)
+        .attr("cx", function (d, i) {
+            return SWidth / (BallNum * 2) + 100 * i;
+        })
+    ;
+    //容器
+    var rect = svg.selectAll("rect").data(Box).enter()
+        .append("rect")
+        .attr("x", function (d, i) {
+            return SWidth / (BoxNum * 2) + 120 * i;
+        })
+        .attr("y", function (d, i) {
+            return SHeight / 2;
+        })
+        .attr("width", 0)
+        .attr("height", 0)
+        .transition()
+        .ease(d3.easeLinear)
+        .duration(1000)
+        .attr("width", function () {
+            return 60;
+        })
+        .attr("height", function () {
+            return 60;
+        })
+        .attr("fill", "white")
+        .attr("stroke", "black")
+        .attr("class", function (d, i) {
+            return "rect_" + i;
+        });
+
+    //动画启动  
+    function start() {
+        var a = d3.rgb(255, 255, 255);
+        var b = d3.rgb(0, 0, 0);
+        var compute = d3.interpolate(b, a);
+        circle
+            .transition()
+            .ease(d3.easeLinear)
+            .duration(2000)
+            .attr("cx", function () {
+                var randomer = Math.floor(Math.random() * BoxNum);
+                Box[randomer]++;
+                return d3.select("rect.rect_" + randomer).attr("x");
+            })
+            .attr("cy", function () {
+                return SHeight / 2;
+            })
+            .attr("r", 0)
+            .remove();
+        var k = 0
+        setInterval(function () {
+                if (k < BoxNum) {
+                    svg.append("text")
+                        .attr("font-size", 40)
+                        .attr("x", function (d, i) {
+                            var x = Number(d3.select("rect.rect_" + k).attr("x"));
+                            return x + 20;
+                        })
+                        .attr("y", function (d, i) {
+                            var y = Number(d3.select("rect.rect_" + k).attr("y"));
+                            return y + 40;
+                        })
+                        .text(Box[k]);
+                    k++;
+                }
+                else window.clearInterval();
+            }
+            , 2000);
+        rect.transition().duration(2000).attr("fill", function (d, i) {
+            return compute(d / 255);
+        });
+    }
+
+</script>
+</body>

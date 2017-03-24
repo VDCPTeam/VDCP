@@ -14,18 +14,22 @@
             background: gray;
         }
     </style>
+    <script type="text/javascript" async
+            src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
 </head>
 <body>
 <div class="container">
     <div class="row">
         <svg class="col s10 m10 l10 grey lighten-5 z-depth-5" id="svg-content" style="height: 800px">
         </svg>
-		<div class="col s2 m2 l2 grey lighten-3 z-depth-5" style="height: 800px">
-		   <a class="waves-effect waves-light btn-large text-pas-start" onclick="start()" style="width: 160px">Start</a>
-           <a class="waves-effect waves-light btn-large text-pas-back" onclick="back()" style="width: 160px">Back</a>
-           <a class="waves-effect waves-light btn-large text-pas-loc" onclick="coordinate()" style="width: 160px">Location</a>
-		   <a class="waves-effect waves-light btn-large text-pas-rela" onclick="relation()" style="width: 160px">Relation</a>
-		</div>
+        <div class="col s2 m2 l2 grey lighten-3 z-depth-5" style="height: 800px">
+            <a class="waves-effect waves-light btn-large text-pas-start" onclick="start()"
+               style="width: 160px">Start</a>
+            <a class="waves-effect waves-light btn-large text-pas-back" onclick="back()" style="width: 160px">Back</a>
+            <a class="waves-effect waves-light btn-large text-pas-loc" onclick="coordinate()" style="width: 160px">Location</a>
+            <a class="waves-effect waves-light btn-large text-pas-rela" onclick="relation()" style="width: 160px">Relation</a>
+        </div>
     </div>
 </div>
 <!--侧边栏-->
@@ -76,19 +80,19 @@
 <div id="info-modal" class="modal blue lighten-3">
     <div class="modal-content">
         <h4 id="text-modal-info"></h4>
-        <div id="text-fib-0-info"></div>
+        <div id="text-pas-info"></div>
     </div>
     <div class="modal-footer">
-        <a href="fib-1.html" class=" modal-action modal-close waves-effect waves-green btn-flat text-next"></a>
+        <a href="pas-1.html" class=" modal-action modal-close waves-effect waves-green btn-flat text-next"></a>
     </div>
 </div>
 <div id="help-modal" class="modal orange lighten-3">
     <div class="modal-content">
         <h4 id="text-modal-help"></h4>
-        <div id="text-fib-0-help"></div>
+        <div id="text-pas-help"></div>
     </div>
     <div class="modal-footer">
-        <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat text-yes"></a>
+        <a href="#" class=" modal-action modal-close waves-effect waves-green btn-flat text-yes"></a>
     </div>
 </div>
 <!--注意：涉及页面文本的修改要到json里面改-->
@@ -115,7 +119,6 @@
      */
     var lang;
     var isinitial = true;
-    var fib_0_intro;
     var next;
     $(document).ready(function () {
         $('select').material_select();
@@ -155,6 +158,8 @@
             $(".text-pas-loc").html(data.pas_loc);
             $(".text-pas-back").html(data.pas_back);
             $(".text-next").html(data.next);
+            $("#text-pas-help").html(data.pas_help);
+            $("#text-pas-info").html(data.pas_info);
             document.title = data.pas_0_title;
             /**
              * 到这里结束
@@ -192,292 +197,302 @@
 </script>
 <!--开始本页内容-->
 <script>
-    var height=800;
-    var width=1080;
-    var svg=d3.select("svg");
-	    svg.call(d3.zoom()
-         .scaleExtent([1 / 10, 8])
-         .on("zoom", zoomed));
+    var height = 800;
+    var width = 1080;
+    var svg = d3.select("svg");
+    svg.call(d3.zoom()
+        .scaleExtent([1 / 10, 8])
+        .on("zoom", zoomed));
     var elementMarginY = Math.round(height / 14);
     var topMargin = Math.round(height * 0.07);
-	var g = svg.append("g");
-    
-	function zoomed() {
-      g.attr("transform", d3.event.transform);
-    }
-	var fiData = new Array();
-    for (var i=1;i<=200;i++){
-      fiData[i]=new Array();
-       for (var j=1;j<=i;j++){
-         fiData[i][j]=1;
-     }
-   }
-   fiData[1][1]=1;
-   fiData[2][1]=1;
-   fiData[2][2]=1;
-   for (var i = 3; i <= 200; i++)
-     for (var j=2; j<i; j++) {
-    fiData[i][j]=fiData[i-1][j-1]+fiData[i-1][j];
-   }
-   var data=new Array();
-   var data2=new Array();
-   for(var i=1,m=0;i<=150;i++)
-    for(var j=1;j<=i;j++){
-		 data[m]=fiData[i][j];
-		 var object={
-		     i:i,	 
-			 j:j,
-		  }
-		 data2[m]=object; 
-		 m++;
-    }
-    //生成元素的位置
-    function elementPosition(i,j) {// 输出元素位置
-    var result = {
-        i: i,
-        j: j,
-        x: 0,
-        y: 0,
+    var g = svg.append("g");
 
+    function zoomed() {
+        g.attr("transform", d3.event.transform);
     }
-    result.y = Math.round(topMargin + elementMarginY * i);
-    if (i%2==0) {result.x = Math.round(width/2 - Math.round(Math.round(width / 15)/2)+ (j-parseInt(i/2))*Math.round(width/15) ); }
-    else {result.x=Math.round(width / 2 + (j-1-parseInt(i/2))*Math.round(width/15));}
-    
-	return result;
-   }
-	function position(t){       //输入第几个元素，输出元素位置
-	  return elementPosition(data2[t].i,data2[t].j);
-	}
-	function oppoposition(i,j){ //输入i,j坐标，输出第几个元素
-	  for(var k=0;;k++)
-	   if(data2[k].i==i&&data2[k].j==j) return k;
-	}
-	function positionPath1(t){          //右边
-      return elementPosition(data2[t].i-1,data2[t].j);
-	}
-	function positionPath2(t){           //左边
-	  return elementPosition(data2[t].i-1,data2[t].j-1);
-	}
-	function fillColor(d, i) {
-      var color = d % 0xffffff;
-      var RmG = Math.round(color / 0xffff) - Math.round(color % 0xffff / 0xff);
-      var GmB = Math.round(color % 0xffff / 0xff) - Math.round(color % 0xff);
-      var BmR = Math.round(color % 0xff) - Math.round(color / 0xffff);
-          color += Math.round(RmG * 0xffff + GmB * 0xff + BmR);
-          color = color > 0xffffff ? color % 0xffffff : (color < 0x000000 ? color + 0xffffff : color);
-     switch (color.toString(18).length) {
-        case 0:
-            return "#000000";
-        case 1:
-            return "#00" + color.toString(16) + "00" + color.toString(16);
-        case 2:
-            return "#" + color.toString(16) + color.toString(16) + color.toString(16);
-        case 3:
-            return "#00" + color.toString(16) + "0" + color.toString(16);
-        case 4:
-            return "#00" + color.toString(16);
-        case 5:
-            return "#0" + color.toString(16);
-        case 6:
-            return "#" + color.toString(16);
-        default:
-            return "#000000";
-     }
-   }
-    function render(){
-	    //画圆
-        var updateA=d3.select("g").selectAll("circle").data(data);
-        var enterA=updateA.enter();
+    var fiData = new Array();
+    for (var i = 1; i <= 200; i++) {
+        fiData[i] = new Array();
+        for (var j = 1; j <= i; j++) {
+            fiData[i][j] = 1;
+        }
+    }
+    fiData[1][1] = 1;
+    fiData[2][1] = 1;
+    fiData[2][2] = 1;
+    for (var i = 3; i <= 200; i++)
+        for (var j = 2; j < i; j++) {
+            fiData[i][j] = fiData[i - 1][j - 1] + fiData[i - 1][j];
+        }
+    var data = new Array();
+    var data2 = new Array();
+    for (var i = 1, m = 0; i <= 150; i++)
+        for (var j = 1; j <= i; j++) {
+            data[m] = fiData[i][j];
+            var object = {
+                i: i,
+                j: j,
+            }
+            data2[m] = object;
+            m++;
+        }
+    //生成元素的位置
+    function elementPosition(i, j) {// 输出元素位置
+        var result = {
+            i: i,
+            j: j,
+            x: 0,
+            y: 0,
+
+        }
+        result.y = Math.round(topMargin + elementMarginY * i);
+        if (i % 2 == 0) {
+            result.x = Math.round(width / 2 - Math.round(Math.round(width / 15) / 2) + (j - parseInt(i / 2)) * Math.round(width / 15));
+        }
+        else {
+            result.x = Math.round(width / 2 + (j - 1 - parseInt(i / 2)) * Math.round(width / 15));
+        }
+
+        return result;
+    }
+    function position(t) {       //输入第几个元素，输出元素位置
+        return elementPosition(data2[t].i, data2[t].j);
+    }
+    function oppoposition(i, j) { //输入i,j坐标，输出第几个元素
+        for (var k = 0; ; k++)
+            if (data2[k].i == i && data2[k].j == j) return k;
+    }
+    function positionPath1(t) {          //右边
+        return elementPosition(data2[t].i - 1, data2[t].j);
+    }
+    function positionPath2(t) {           //左边
+        return elementPosition(data2[t].i - 1, data2[t].j - 1);
+    }
+    function fillColor(d, i) {
+        var color = d % 0xffffff;
+        var RmG = Math.round(color / 0xffff) - Math.round(color % 0xffff / 0xff);
+        var GmB = Math.round(color % 0xffff / 0xff) - Math.round(color % 0xff);
+        var BmR = Math.round(color % 0xff) - Math.round(color / 0xffff);
+        color += Math.round(RmG * 0xffff + GmB * 0xff + BmR);
+        color = color > 0xffffff ? color % 0xffffff : (color < 0x000000 ? color + 0xffffff : color);
+        switch (color.toString(18).length) {
+            case 0:
+                return "#000000";
+            case 1:
+                return "#00" + color.toString(16) + "00" + color.toString(16);
+            case 2:
+                return "#" + color.toString(16) + color.toString(16) + color.toString(16);
+            case 3:
+                return "#00" + color.toString(16) + "0" + color.toString(16);
+            case 4:
+                return "#00" + color.toString(16);
+            case 5:
+                return "#0" + color.toString(16);
+            case 6:
+                return "#" + color.toString(16);
+            default:
+                return "#000000";
+        }
+    }
+    function render() {
+        //画圆
+        var updateA = d3.select("g").selectAll("circle").data(data);
+        var enterA = updateA.enter();
         enterA.append("circle")
-	    .attr("r", "18px")
-        .attr("cx", function (d, i) {
-			return position(i).x + "px";
-        })
-        .attr("cy", function (d, i) {
-            return position(i).y + "px";
-        })
-        .attr("fill",function(d,i){
-		    return fillColor(d,i);
-		})
-        .attr("id",function(d,i){
-             return i;
-        })
-        .transition()
-        .duration(1000)
+            .attr("r", "18px")
+            .attr("cx", function (d, i) {
+                return position(i).x + "px";
+            })
+            .attr("cy", function (d, i) {
+                return position(i).y + "px";
+            })
+            .attr("fill", function (d, i) {
+                return fillColor(d, i);
+            })
+            .attr("id", function (d, i) {
+                return i;
+            })
+            .transition()
+            .duration(1000)
     }
-	render();
-	function render2(t){
-	//填数 
-		var updateA=d3.select("g").selectAll("text1").data(data.slice(0,t));
-        var enterA=updateA.enter();
+    render();
+    function render2(t) {
+        //填数
+        var updateA = d3.select("g").selectAll("text1").data(data.slice(0, t));
+        var enterA = updateA.enter();
         enterA.append("text")
-		.transition().duration(3000)
-        .text(function (d, i) {
-            if(i>=t-1)return d;
-        })
-        .attr("x", function (d, i) {
-            return position(i).x -7 + "px";
-        })
-        .attr("y", function (d, i) {
-            return (position(i).y + 11) + "px";
-        })
-        .style("font-size", Math.round(height * 0.025) + "px")
-	}
-	function render3(t){
-	   //画路径
-		var updateA=d3.select("g").selectAll("line1").data(data.slice(0,t));
-        var enterA=updateA.enter();
+            .transition().duration(3000)
+            .text(function (d, i) {
+                if (i >= t - 1)return d;
+            })
+            .attr("x", function (d, i) {
+                return position(i).x - 7 + "px";
+            })
+            .attr("y", function (d, i) {
+                return (position(i).y + 11) + "px";
+            })
+            .style("font-size", Math.round(height * 0.025) + "px")
+    }
+    function render3(t) {
+        //画路径
+        var updateA = d3.select("g").selectAll("line1").data(data.slice(0, t));
+        var enterA = updateA.enter();
         enterA.append("line")
-		.transition().duration(1000)
-		.attr("x1",function(d,i){
-		  if(data[i]!=1&&i>=t-1)  return position(i).x + "px";
-		})
-		.attr("y1",function(d,i){
-		  if(data[i]!=1&&i>=t-1) return position(i).y + "px";
-		})
-		.attr("x2",function(d,i){
-		  if(data[i]!=1&&i>=t-1) return positionPath1(i).x - 10;
-		})
-		.attr("y2",function(d,i){
-		  if(data[i]!=1&&i>=t-1) return positionPath1(i).y + 10;
-		})
-		
-	    .style("stroke", function (d, i) {
-           if(i>=t-1) return fillColor(d, i);
-        })
-		.style("fill", "none")
-		.style("stroke-width", (1 + Math.round(height / 400)).toString())
-		
-		//左边
-		var updateB=d3.select("g").selectAll("line2").data(data.slice(0,t));
-        var enterB=updateB.enter();
+            .transition().duration(1000)
+            .attr("x1", function (d, i) {
+                if (data[i] != 1 && i >= t - 1)  return position(i).x + "px";
+            })
+            .attr("y1", function (d, i) {
+                if (data[i] != 1 && i >= t - 1) return position(i).y + "px";
+            })
+            .attr("x2", function (d, i) {
+                if (data[i] != 1 && i >= t - 1) return positionPath1(i).x - 10;
+            })
+            .attr("y2", function (d, i) {
+                if (data[i] != 1 && i >= t - 1) return positionPath1(i).y + 10;
+            })
+
+            .style("stroke", function (d, i) {
+                if (i >= t - 1) return fillColor(d, i);
+            })
+            .style("fill", "none")
+            .style("stroke-width", (1 + Math.round(height / 400)).toString())
+
+        //左边
+        var updateB = d3.select("g").selectAll("line2").data(data.slice(0, t));
+        var enterB = updateB.enter();
         enterB.append("line")
-		.transition().duration(1000)
-		.attr("x1",function(d,i){
-		  if(data[i]!=1&&i>=t-1) return position(i).x - 5 + "px";
-		})
-		.attr("y1",function(d,i){
-		  if(data[i]!=1&&i>=t-1) return position(i).y - 7 + "px";
-		})
-		.attr("x2",function(d,i){
-		  if(data[i]!=1&&i>=t-1) return positionPath2(i).x + 6;
-		})
-		.attr("y2",function(d,i){
-		  if(data[i]!=1&&i>=t-1) return positionPath2(i).y + 9;
-		})
-		
-	    .style("stroke", function (d, i) {
-           if(i>=t-1) return fillColor(d, i);
-        })
-		.style("fill", "none")
-		.style("stroke-width", (1 + Math.round(height / 400)).toString())
-	}
-    
-	function render4(){
-	    var updateB=d3.select("g").selectAll("text2").data(data2);
-        var enterB=updateB.enter();
+            .transition().duration(1000)
+            .attr("x1", function (d, i) {
+                if (data[i] != 1 && i >= t - 1) return position(i).x - 5 + "px";
+            })
+            .attr("y1", function (d, i) {
+                if (data[i] != 1 && i >= t - 1) return position(i).y - 7 + "px";
+            })
+            .attr("x2", function (d, i) {
+                if (data[i] != 1 && i >= t - 1) return positionPath2(i).x + 6;
+            })
+            .attr("y2", function (d, i) {
+                if (data[i] != 1 && i >= t - 1) return positionPath2(i).y + 9;
+            })
+
+            .style("stroke", function (d, i) {
+                if (i >= t - 1) return fillColor(d, i);
+            })
+            .style("fill", "none")
+            .style("stroke-width", (1 + Math.round(height / 400)).toString())
+    }
+
+    function render4() {
+        var updateB = d3.select("g").selectAll("text2").data(data2);
+        var enterB = updateB.enter();
         enterB.append("text")
-        .text(function (d, i) {
-            return ("["+d.i+","+d.j+"]");
-        })
-        .attr("x", function (d, i) {
-            return position(i).x -15 + "px";
-        })
-        .attr("y", function (d, i) {
-            return (position(i).y + 29) + "px";
-        })
-        .style("font-size", Math.round(height * 0.015) + "px")
-		.attr("id",function(d,i){
-             return "text2"+i;
-        })
-	}    
-	function hover() {
-       $("circle").mouseenter(
-	     function(){
-           var idd= $(this).attr("id");
-		   $(this)
-		     .attr("r", function (){
-                 var r;
-                 r = 23;
-                 return r + "px";
-             })
-			 .css("stroke", "red")
-		   if(data[idd]!=1){
-		   idd=oppoposition(data2[idd].i-1,data2[idd].j);
-		   $("#"+idd)
-		     .attr("r", function (){
-                 var r;
-                 r = 23;
-                 return r + "px";
-             })
-			 .css("stroke", "red")
-		   idd=oppoposition(data2[idd].i,data2[idd].j-1);
-		   $("#"+idd)
-		     .attr("r", function (){
-                 var r;
-                 r = 23;
-                 return r + "px";
-             })
-			 .css("stroke", "red")
-			 }	 
-         }
-	   );
-	   $("circle").mouseleave(
-	    function(){
-           $(this)
-		     .attr("r", function (){
-                 var r;
-                 r = 18;
-                 return r + "px";
-             })
-			 .css("stroke", "white")
-		   var idd= $(this).attr("id"); 
-		     if(data[idd]!=1){ 
-			   idd=oppoposition(data2[idd].i-1,data2[idd].j);
-		       $("#"+idd)
-		        .attr("r", function (){
-                   var r;
-                   r = 18;
-                   return r + "px";
-                })
-			    .css("stroke", "white")
-			   idd=oppoposition(data2[idd].i,data2[idd].j-1);
-		       $("#"+idd)
-		        .attr("r", function (){
-                   var r;
-                   r = 18;
-                   return r + "px";
-                })
-			    .css("stroke", "white")	
-			 }
-        });	 
+            .text(function (d, i) {
+                return ("[" + d.i + "," + d.j + "]");
+            })
+            .attr("x", function (d, i) {
+                return position(i).x - 15 + "px";
+            })
+            .attr("y", function (d, i) {
+                return (position(i).y + 29) + "px";
+            })
+            .style("font-size", Math.round(height * 0.015) + "px")
+            .attr("id", function (d, i) {
+                return "text2" + i;
+            })
     }
-	var id; 
-	function start(){//按键事件监听器,开始
-	  var k=1;
-	  id=setInterval(function lop(){
-	     render2(k);
-		 render3(k);
-		 k++;
-	  },1000)
-	  $("#start").attr("disabled", true);
+    function hover() {
+        $("circle").mouseenter(
+            function () {
+                var idd = $(this).attr("id");
+                $(this)
+                    .attr("r", function () {
+                        var r;
+                        r = 23;
+                        return r + "px";
+                    })
+                    .css("stroke", "red")
+                if (data[idd] != 1) {
+                    idd = oppoposition(data2[idd].i - 1, data2[idd].j);
+                    $("#" + idd)
+                        .attr("r", function () {
+                            var r;
+                            r = 23;
+                            return r + "px";
+                        })
+                        .css("stroke", "red")
+                    idd = oppoposition(data2[idd].i, data2[idd].j - 1);
+                    $("#" + idd)
+                        .attr("r", function () {
+                            var r;
+                            r = 23;
+                            return r + "px";
+                        })
+                        .css("stroke", "red")
+                }
+            }
+        );
+        $("circle").mouseleave(
+            function () {
+                $(this)
+                    .attr("r", function () {
+                        var r;
+                        r = 18;
+                        return r + "px";
+                    })
+                    .css("stroke", "white")
+                var idd = $(this).attr("id");
+                if (data[idd] != 1) {
+                    idd = oppoposition(data2[idd].i - 1, data2[idd].j);
+                    $("#" + idd)
+                        .attr("r", function () {
+                            var r;
+                            r = 18;
+                            return r + "px";
+                        })
+                        .css("stroke", "white")
+                    idd = oppoposition(data2[idd].i, data2[idd].j - 1);
+                    $("#" + idd)
+                        .attr("r", function () {
+                            var r;
+                            r = 18;
+                            return r + "px";
+                        })
+                        .css("stroke", "white")
+                }
+            });
     }
-    function back(){//还原画面
-       window.clearInterval(id);	
+    var id;
+    function start() {//按键事件监听器,开始
+        var k = 1;
+        id = setInterval(function lop() {
+            render2(k);
+            render3(k);
+            k++;
+        }, 1000)
+        $("#start").attr("disabled", true);
+    }
+    function back() {//还原画面
+        window.clearInterval(id);
         svg.selectAll("text").remove();
         svg.selectAll("line").remove();
         render();
-		$("#start").attr("disabled", false);
-		$("#coordinate").attr("disabled", false);
+        $("#start").attr("disabled", false);
+        $("#coordinate").attr("disabled", false);
     }
-	function relation(){
-	    hover();
-	}
-	function coordinate(){ 	
-		render4(); 
-		$("#coordinate").attr("disabled", true);
-	}
-    </script>
+    function relation() {
+        hover();
+    }
+    function coordinate() {
+        render4();
+        $("#coordinate").attr("disabled", true);
+    }
+    setTimeout(function () {
+        $("#help-modal").modal("open");
+    }, 100);
+    setTimeout(function () {
+        $("#help-modal").modal("close");
+    }, 5000);
+</script>
 </body>
 </html>
