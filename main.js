@@ -4,7 +4,11 @@ const BrowserWindow = electron.BrowserWindow;
 
 var win = null;
 
-app.on('ready', function() {
+app.on('ready', function () {
     win = new BrowserWindow({width: 1280, height: 800});
     win.loadURL('file://' + __dirname + '/index.html');
+});
+
+app.on('window-all-closed', function () {
+    app.quit();
 });

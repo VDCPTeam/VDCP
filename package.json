@@ -1,6 +1,6 @@
 {
   "name": "VDCP",
-  "version": "0.0.1",
+  "version": "0.9.7",
   "main": "main.js",
   "license": "BSD-3-Clause",
   "author": {
@@ -17,5 +17,8 @@
     "d3": "4.7.4",
     "jquery": "3.2.1"
   },
-  "description": ""
+  "description": "Visualized design of counting principle based on d3.js.",
+  "scripts": {
+    "electron": "electron ./"
+  }
 }
