@@ -2,17 +2,13 @@
 <body lang="zh-cn">
 <head>
     <meta charset="UTF-8">
-    <script type="text/javascript" src="../lib/d3-4.7.1/d3.min.js"></script>
-    <script type="text/javascript" src="../node_modules/hammerjs/hammer.min.js"></script>
-    <script type="text/javascript" src="../lib/jquery-3.3.1/jquery-3.1.1.min.js"></script>
+    <!--标题栏-->
+    <title>template</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <script type="text/javascript" src="../node_modules/materialize-css/bin/materialize.js"></script>
-    <link rel="stylesheet" type="text/css" href="../node_modules/materialize-css/bin/materialize.css">
-    <meta charset="UTF-8">
-    <script type="text/javascript"
-            src="../node_modules/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-    </script>
-    <title></title>
+    <script src="../lib/jquery-3.3.1/jquery-3.1.1.min.js"></script>
+    <script src="../lib/materialize-0.97.8/js/materialize.min.js"></script>
+    <link rel="stylesheet" href="../lib/materialize-0.97.8/css/materialize.min.css"/>
+    <script src="../lib/d3-4.7.1/d3.min.js"></script>
     <style type="text/css">
         body {
             background: gray;
@@ -64,8 +60,7 @@
         <i class="large material-icons">menu</i>
     </a>
     <ul>
-        <li class="waves-effect waves-light"><a href="../index.html" class="tooltipped" id="text-tooltip-home"
-                                                data-position="top" data-delay="50"><i
+        <li class="waves-effect waves-light"><a href="../" class="tooltipped" id="text-tooltip-home"><i
                 class="material-icons">view_carousel</i></a></li>
         <li class="waves-effect waves-light"><a href="#!" class="tooltipped button-collapse" data-activates="slide-out"
                                                 id="text-tooltip-sidenav" data-position="top" data-delay="50"><i
@@ -237,12 +232,10 @@
         {"source": "Susan", "target": "Walt"},
         {"source": "Susan", "target": "Karl"},
         {"source": "Walt", "target": "Karl"}];
-
-    var link = svg.append("g")
-        .attr("class", "links").selectAll("line").data(Link).enter().append("line");
-    var node = svg.append("g")
-        .attr("class", "nodes")
-        .selectAll("circle")
+    //svg.append("text").attr("x",10).attr("y",30).attr("font-size",30).text("（非正式提示），此模板为六人问题");
+    //svg.append("text").attr("y",400).attr("y",60).attr("font-size",10).text("拉姆塞定理示例，六人聚会问题，两人之间只存在朋友与陌生人的关系，则对于任\n意一人来说，认识与不认识的人必定有一种超过两人。");
+    var link = svg.selectAll("line").data(Link).enter().append("line");
+    var node = svg.selectAll("circle")
         .data(nodes)
         .enter()
         .append("circle")
@@ -253,14 +246,70 @@
         .attr("class", function (d, i) {
             return "People_" + d.id;
         })
+        .attr("cx", function (d, i) {
+            return d.x * 75;
+        })
+        .attr("cy", function (d, i) {
+            return d.y * 75;
+        })
         .attr("r", 0);
-    //示例测试
+    /*var simulation=d3.forceSimulation()
+                     .force("link",d3.forceLink.id(function(d){return d.id}))
+                     .force("charge",d3.forceManyBody())
+                     .force("center",d3.forceCenter(SWidth/2,SHeight/2));
+    node.call(d3.drag().on("start",dragstarted).on("drag",dragged).on("end",dragended));
+    simulation.nodes(nodes).on("tick",ticked);
+    simulation.force("link").links(links)
+    */
+    /*node.call(d3.drag().on("start",function(d) {
+     d.fx = d.x;
+     d.fy = d.y;
+     }).on("drag", function(d) {
+     d.fx = d3.event.x;
+     d.fy = d3.event.y;
+     link.attr("x1", function(ld, i) {
+     if (ld.source == d.id) {
+
+     }
+     })
+     }).on("end", function(d) {
+     d.fx = null;
+     d.fy = null;
+     }));*/
     node
         .transition()
         .duration(1000)
         .attr("r", 30);
+    /*var link=svg.selectAll("line").data(Link).enter().append("line").attr("x1",function(d,i){
+     return d3.select("circle.People_"+d.source).attr("cx");
+     })
+     .attr("y1",function(d,i){
+     return d3.select("circle.People_"+d.source).attr("cy");
+     })
+     .attr("x2",function(d,i){
+     return d3.select("circle.People_"+d.target).attr("cx");
+     })
+     .attr("y2",function(d,i){
+     return d3.select("circle.People_"+d.target).attr("cy");
+     })
+     .attr("stroke","#aaa")
+     .attr("stroke-width",1)
+     .attr("z-index",-999);
+     */
 
     link
+        .attr("x1", function (d) {
+            return d3.select("circle.People_" + d.source).attr("cx");
+        })
+        .attr("y1", function (d) {
+            return d3.select("circle.People_" + d.source).attr("cy");
+        })
+        .attr("x2", function (d) {
+            return d3.select("circle.People_" + d.target).attr("cx");
+        })
+        .attr("y2", function (d) {
+            return d3.select("circle.People_" + d.target).attr("cy");
+        })
         .attr("stroke", "#aaa")
         .attr("stroke-width", 0)
         .attr("id", function (d, i) {
@@ -278,7 +327,6 @@
         .enter()
         .append("text")
         .attr("class", function (d, i) {
-            console.log("1");
             return "text_" + i;
         })
         .attr("x", function (d, i) {
@@ -308,70 +356,17 @@
         .attr("fill", "#01579b");
 
 
-    var simulation = d3.forceSimulation()
-        .force("link", d3.forceLink().id(function (d) {
-            return d.id
-        }).distance(300))
-        .force("charge", d3.forceManyBody())
-        .force("center", d3.forceCenter(SWidth / 2 + 400, SHeight / 2 + 400));
-    simulation.nodes(nodes).on("tick", ticked);
-    simulation.force("link").links(Link);
-    node.call(d3.drag()
-        .on("start", dragstarted)
-        .on("drag", dragged)
-        .on("end", dragended));
-    function ticked() {
-        link.attr("x1", function (d) {
-            return d.source.x;
-        })
-            .attr("y1", function (d) {
-                return d.source.y;
-            })
-            .attr("x2", function (d) {
-                return d.target.x;
-            })
-            .attr("y2", function (d) {
-                return d.target.y;
-            })
-        node.attr("cx", function (d) {
-            return d.x;
-        })
-            .attr("cy", function (d) {
-                return d.y;
-            });
-        text_circle.attr("x", function (d) {
-            return d.x;
-        })
-            .attr("y", function (d) {
-                return d.y
-            });
-        text_line.attr("x", function (d) {
-            return d.x;
-        })
-            .attr("y", function (d) {
-                return d.y;
-            });
-    }
-    function dragstarted(d) {
-        if (!d3.event.active) simulation.alphaTarget(0.3).restart();
-        d.fx = d.x;
-        d.fy = d.y;
-    }
-    function dragged(d) {
-        d.fx = d3.event.x;
-        d.fy = d3.event.y;
-    }
-    function dragended(d) {
-        if (!d3.event.active) simulation.alphaTarget(0);
-        d.fx = null;
-        d.fy = null;
-    }
     //圆事件监听器
     d3.selectAll("circle").on("mouseover", function (d, i) {
         d3.select(this).transition().duration(500).attr("r", 40);
         svg.select("text.textc_" + i).transition().duration(500).attr("font-size", 20);
-        d3.selectAll("line.Source_" + d.id).transition().duration(500).attr("stroke-width", 6);
-        d3.selectAll("line.Target_" + d.id).transition().duration(500).attr("stroke-width", 6);
+        d3.selectAll("line.Source_" + d.id).transition().duration(500).attr("stroke-width", 6)
+        /*.call(function(dl,il){
+         d3.selectAll("text.text_"+il).transition().duration().attr("font-size",20);
+         })*/;
+        d3.selectAll("line.Target_" + d.id).transition().duration(500).attr("stroke-width", 6)/*.call(function(dl,il){
+         d3.selectAll("text.text_"+il).transition().duration().attr("font-size",20);
+         })*/;
     })
         .on("mouseout", function (d, i) {
             d3.select(this).transition().duration(500).attr("r", 30);
@@ -398,8 +393,6 @@
     //线事件监听器
     d3.selectAll("line").on("mouseover", function (d, i) {
         d3.select(this).transition().duration(500).attr("stroke-width", 6);
-        //Materialize.toast("<div><span class='red-text'>红色</span><span>线为朋友，<div><span class='blue-text'>蓝色</span><span>线为陌生人",2000);
-        console.log(1);
         d3.select("text.text_" + i).attr("font-size", 20);
     })
         .on("mouseout", function (d, i) {
@@ -411,6 +404,41 @@
         });
 
 
+    //示例测试
+    /*var simulation=d3.forceSimulation()
+                    .force("link",d3.forceLink().id(function(d){ return d.id}).distance(200))
+                    .force("charge",d3.forceManyBody())
+                    .force("center",d3.forceCenter(SWidth/2,SHeight/2));
+     simulation.nodes(nodes).on("tick",ticked);
+     simulation.force("link").links(Link);     
+     node.call(d3.drag()
+     . on("start",dragstarted)
+     .on("drag",dragged)
+     .on("end",dragended));          
+function ticked(){
+    link.
+    attr("x1",function(d){return d.source.x;})
+    .attr("y1",function(d){return d.source.y;})
+    .attr("x2",function(d){return d.target.x;})
+    .attr("y",function(d){return d.target.y;})
+    node.
+    attr("cx",function(d){return d.x;})
+    .attr("cy",function(d){return d.y;});
+}
+function dragstarted(d){
+    if(!d3.event.active)simulation.alphaTarget(0.3).restart();
+    d.fx=d.x;
+    d.fy=d.y;
+}
+function dragged(d){
+    d.fx=d3.event.x;
+    d.fy=d3.event.y;
+}
+function dragended(d){
+    if(!d3.event.active)simulation.alphaTarget(0);
+    d.fx=null;
+    d.fy=null;
+}*/
 </script>
 <script>
 

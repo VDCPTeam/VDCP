@@ -2,13 +2,17 @@
 <html lang="zh-cn">
 <head>
     <meta charset="UTF-8">
-    <!--标题栏-->
-    <title>template</title>
+    <script type="text/javascript" src="../lib/d3-4.7.1/d3.min.js"></script>
+    <script type="text/javascript" src="../node_modules/hammerjs/hammer.min.js"></script>
+    <script type="text/javascript" src="../lib/jquery-3.3.1/jquery-3.1.1.min.js"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <script src="../lib/jquery-3.3.1/jquery-3.1.1.min.js"></script>
-    <script src="../lib/materialize-0.97.8/js/materialize.min.js"></script>
-    <link rel="stylesheet" href="../lib/materialize-0.97.8/css/materialize.min.css"/>
-    <script src="../lib/d3-4.7.1/d3.min.js"></script>
+    <script type="text/javascript" src="../node_modules/materialize-css/bin/materialize.js"></script>
+    <link rel="stylesheet" type="text/css" href="../node_modules/materialize-css/bin/materialize.css">
+    <meta charset="UTF-8">
+    <script type="text/javascript"
+            src="../node_modules/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    </script>
+    <title></title>
     <style type="text/css">
         body {
             background: gray;
@@ -20,14 +24,16 @@
     <div class="row">
         <svg class="col s10 m10 l10 grey lighten-5 z-depth-5" id="svg-content" style="height: 800px">
         </svg>
-
-        <div class="col s2 m2 l2 blue-grey offset-s10 lighten-5 z-depth-5 valign-wrapper" id="svg-control"
+        <div class="col s2 m2 l2 blue-grey lighten-5 z-depth-5 valign-wrapper" id="svg-control"
              style="height: 800px; z-index:-1">
-            <a class="btn-floating btn-large waves-effect waves-light red" onclick="start()"><i class="material-icons">play_arrow</i></a>
-            <a class="btn-floating btn-large waves-effect waves-light blue" href="nest-0.html"><i
+            <a class="btn-floating btn-large waves-effect waves-light red" onclick="start()" id="StartButton"><i
+                    class="material-icons">play_arrow</i></a>
+            <a class="btn-floating btn-large waves-effect waves-light blue" onclick="replay()"><i
                     class="material-icons">replay</i></a>
         </div>
+
     </div>
+
 
 </div>
 <!--侧边栏-->
@@ -63,7 +69,8 @@
         <i class="large material-icons">menu</i>
     </a>
     <ul>
-        <li class="waves-effect waves-light"><a href="../" class="tooltipped" id="text-tooltip-home"><i
+        <li class="waves-effect waves-light"><a href="../index.html" class="tooltipped" id="text-tooltip-home"
+                                                data-position="top" data-delay="50"><i
                 class="material-icons">view_carousel</i></a></li>
         <li class="waves-effect waves-light"><a href="#!" class="tooltipped button-collapse" data-activates="slide-out"
                                                 id="text-tooltip-sidenav" data-position="top" data-delay="50"><i
@@ -198,7 +205,7 @@
     }, 100);
     setTimeout(function () {
         $("#info-modal").modal('close');
-    }, 5000);
+    }, 3000);
     setTimeout(function () {
         $("#help-modal").modal('open');
     }, 6000);
@@ -215,74 +222,157 @@
             Materialize.toast(data.nest_0_toast_alert[0] + BallNum + data.nest_0_toast_alert[1], 3000);
         });
     }, 7000);
+    var color = ["#fffde7", "#fff9c4", "#fff59d", "#fbc02d", "#ffeb3b", "#fdd835", "#fbc02d"];
     var BoxNum = 5;
     //document.getElementById("num").value;
     var svg = d3.select("svg");
-    var SWidth = 900;
+    var SWidth = 800;
     var SHeight = 800;
-
-    var BallNum = BoxNum + Math.floor(Math.random() * 3);
+    var BallNum;
     var Box = new Array(BoxNum);
-    var Ball = new Array(BallNum);
-    for (var i = 0; i < BoxNum; i++)Box[i] = 0;
-    for (var i = 0; i < BallNum; i++)Ball[i] = 1;
+    var Ball = new Array();
+    var circle;
+    var rect;
     //容置
-    var circle = svg.selectAll("circle").data(Ball).enter()
-        .append("circle")
-        .attr("r", 0)
-        .attr("cx", SWidth / 8)
-        .attr("cy", SHeight / 4)
-        .attr("fill", "black")
-        .attr("class", function (d, i) {
-            return "circle_" + i;
-        });
-    circle
-        .transition()
-        .ease(d3.easeLinear)
-        .duration(1000)
-        .attr("r", 25)
-        .transition()
-        .ease(d3.easeLinear)
-        .duration(1000)
-        .attr("cx", function (d, i) {
-            return SWidth / (BallNum * 2) + 100 * i;
-        })
-    ;
-    //容器
-    var rect = svg.selectAll("rect").data(Box).enter()
-        .append("rect")
-        .attr("x", function (d, i) {
-            return SWidth / (BoxNum * 2) + 120 * i;
-        })
-        .attr("y", function (d, i) {
-            return SHeight / 2;
-        })
-        .attr("width", 0)
-        .attr("height", 0)
-        .transition()
-        .ease(d3.easeLinear)
-        .duration(1000)
-        .attr("width", function () {
-            return 60;
-        })
-        .attr("height", function () {
-            return 60;
-        })
-        .attr("fill", "white")
-        .attr("stroke", "black")
-        .attr("class", function (d, i) {
-            return "rect_" + i;
-        });
+    function render() {
+        BallNum = BoxNum + Math.floor(Math.random() * 3 + 1);
+        for (var i = 0; i < BoxNum; i++)Box[i] = 0;
+        for (var i = 0; i < BallNum; i++)Ball[i] = 1;
+        circle = svg.selectAll("circle").data(Ball).enter()
+            .append("circle")
+            .attr("r", 0)
+            .attr("cx", SWidth / 8)
+            .attr("cy", SHeight / 4)
+            .attr("fill", "#ffcc80")
+            .attr("stroke", "#fb8c00")
+            .attr("class", function (d, i) {
+                return "circle_" + i;
+            });
+        setTimeout(function () {
+                circle
+                    .transition()
+                    .ease(d3.easeLinear)
+                    .duration(1000)
+                    .attr("r", 25)
+                    .transition()
+                    .ease(d3.easeLinear)
+                    .duration(1000)
+                    .attr("cx", function (d, i) {
+                        return SWidth / (BallNum * 2) + 100 * i;
+                    })
+                ;
+            }
+            , 4000);
+        //容器
+        rect = svg.selectAll("rect").data(Box).enter()
+            .append("rect")
+            .attr("x", function (d, i) {
+                return SWidth / (BoxNum * 2) + 120 * i;
+            })
+            .attr("y", function (d, i) {
+                return SHeight / 2;
+            })
+            .attr("width", 0)
+            .attr("height", 0)
+            .transition()
+            .ease(d3.easeLinear)
+            .duration(1000)
+            .attr("width", function () {
+                return 60;
+            })
+            .attr("height", function () {
+                return 60;
+            })
+            .attr("fill", "white")
+            .attr("stroke", "#ffd600")
+            .attr("class", function (d, i) {
+                return "rect_" + i;
+            });
+        svg.selectAll("circle")
+            .call(d3.drag().on("drag", dragged)//.on("dragend",dragend)
+            );
+    }
+    render();
+    var CircleClass;
+
+
+    svg.selectAll("rect").on("mouseover", function (d) {
+        if (d3.select("circle." + CircleClass) != null) {
+            var dx = Math.floor(d3.select(this).attr("x"));
+            var dy = Math.floor(d3.select(this).attr("y"));
+            var cx = Math.floor(d3.select("circle." + CircleClass).attr("cx"));
+            var cy = Math.floor(d3.select("circle." + CircleClass).attr("cy"));
+            var ClassNow = d3.select(this).attr("class");
+            if (distance(dx, dy, cx, cy) < 100) {
+                d3.select("circle." + CircleClass).remove();
+                CircleClass = d3.selectAll("circle").attr("class");
+                CircleSelect = 0;
+                BallNum--;
+                d++;
+                if (d == 1) {
+                    svg.append("text")
+                        .attr("font-size", 40)
+                        .attr("x", function (d, i) {
+                            var x = Number(d3.select("rect." + ClassNow).attr("x"));
+                            return x + 20;
+                        })
+                        .attr("y", function (d, i) {
+                            var y = Number(d3.select("rect." + ClassNow).attr("y"));
+                            return y + 40;
+                        })
+                        .attr("id", ClassNow)
+                        .text(d);
+                    console.log(d);
+                    d3.select("rect." + ClassNow).attr("fill", function (d) {
+                        return color[d];
+                    });
+                }
+                else if (d > 1) {
+                    svg.select("text#" + ClassNow).remove();
+                    svg.append("text")
+                        .attr("font-size", 40)
+                        .attr("x", function (d, i) {
+                            var x = Number(d3.select("rect." + ClassNow).attr("x"));
+                            return x + 20;
+                        })
+                        .attr("y", function (d, i) {
+                            var y = Number(d3.select("rect." + ClassNow).attr("y"));
+                            return y + 40;
+                        })
+                        .attr("id", ClassNow)
+                        .text(d);
+                    console.log(d);
+                    d3.select("rect." + ClassNow).attr("fill", function (d) {
+                        return color[d];
+                    });
+                }//d3.select("circle.circle_"+i).remove();
+            }
+            else console.log("No circle");
+        }
+    });
+    //距离
+    function distance(x1, y1, x2, y2) {
+        return Math.abs(Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)));
+    }
+    //拖拽   
+
+    function dragged(d) {
+        //d3.select("#StartButton").attr("class"," disabled");
+        d3.select(this).attr("cx", d.x = d3.event.x).attr("cy", dy = d3.event.y);
+        CircleClass = d3.select(this).attr("class");
+
+    }
+
 
     //动画启动  
     function start() {
-        var a = d3.rgb(255, 255, 255);
-        var b = d3.rgb(0, 0, 0);
-        var compute = d3.interpolate(b, a);
+        var a = d3.rgb(227, 242, 253);
+        var b = d3.rgb(13, 71, 161);
+        var compute = d3.interpolate(a, b);
         circle
             .transition()
             .ease(d3.easeLinear)
-            .duration(2000)
+            .duration(1000)
             .attr("cx", function () {
                 var randomer = Math.floor(Math.random() * BoxNum);
                 Box[randomer]++;
@@ -307,15 +397,35 @@
                             return y + 40;
                         })
                         .text(Box[k]);
+                    d3.select("rect.rect_" + k).attr("fill", function () {
+                        return color[Box[k]];
+                    });
                     k++;
                 }
                 else window.clearInterval();
             }
-            , 2000);
-        rect.transition().duration(2000).attr("fill", function (d, i) {
-            return compute(d / 255);
-        });
+            , 1000);
+        Materialize.toast("必有一个或多个容器内有大于等于一个元素", 2000);
+        setTimeout(function () {
+            d3.selectAll("rect")
+                .attr("stroke-width", 5)
+                .attr("stroke", function (d, i) {
+                    if (Box[i] >= 1)
+                        return "#e64a19";
+                })
+            ;
+        }, 6000)
+        setTimeout(function () {
+            d3.selectAll("rect")
+                .attr("stroke", "#ffd600")
+                .attr("stroke-width", 1);
+        }, 7000)
     }
-
+    function replay() {
+        d3.selectAll("circle").remove();
+        d3.selectAll("rect").remove();
+        d3.selectAll("text").remove();
+        render();
+    }
 </script>
 </body>

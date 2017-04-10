@@ -1,5 +1,21 @@
 {
   "name": "VDCP",
   "version": "0.0.1",
-  "main": "main.js"
+  "main": "main.js",
+  "license": "BSD-3-Clause",
+  "author": {
+    "name": "VDCPTeam",
+    "url": "https://github.com/VDCPTeam"
+  },
+  "keywords": [
+    "education",
+    "data-driven"
+  ],
+  "dependencies": {
+    "materialize-css": "0.98.1",
+    "mathjax": "2.7.0",
+    "d3": "4.7.4",
+    "jquery": "3.2.1"
+  },
+  "description": ""
 }

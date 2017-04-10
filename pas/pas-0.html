@@ -2,21 +2,22 @@
 <html lang="zh-cn">
 <head>
     <meta charset="UTF-8">
-    <!--标题栏-->
-    <title>杨辉三角-1</title>
+    <script type="text/javascript" src="../lib/d3-4.7.1/d3.min.js"></script>
+    <script type="text/javascript" src="../node_modules/hammerjs/hammer.min.js"></script>
+    <script type="text/javascript" src="../lib/jquery-3.3.1/jquery-3.1.1.min.js"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <script src="../lib/jquery-3.3.1/jquery-3.1.1.min.js"></script>
-    <script src="../lib/materialize-0.97.8/js/materialize.min.js"></script>
-    <link rel="stylesheet" href="../lib/materialize-0.97.8/css/materialize.min.css"/>
-    <script src="../lib/d3-4.7.1/d3.min.js"></script>
+    <script type="text/javascript" src="../node_modules/materialize-css/bin/materialize.js"></script>
+    <link rel="stylesheet" type="text/css" href="../node_modules/materialize-css/bin/materialize.css">
+    <meta charset="UTF-8">
+    <script type="text/javascript"
+            src="../node_modules/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    </script>
+    <title></title>
     <style type="text/css">
         body {
             background: gray;
         }
     </style>
-    <script type="text/javascript" async
-            src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
-    </script>
 </head>
 <body>
 <div class="container">
@@ -65,7 +66,8 @@
         <i class="large material-icons">menu</i>
     </a>
     <ul>
-        <li class="waves-effect waves-light"><a href="../" class="tooltipped" id="text-tooltip-home"><i
+        <li class="waves-effect waves-light"><a href="../index.html" class="tooltipped" id="text-tooltip-home"
+                                                data-position="top" data-delay="50"><i
                 class="material-icons">view_carousel</i></a></li>
         <li class="waves-effect waves-light"><a href="#!" class="tooltipped button-collapse" data-activates="slide-out"
                                                 id="text-tooltip-sidenav" data-position="top" data-delay="50"><i
@@ -200,6 +202,171 @@
 </script>
 <!--开始本页内容-->
 <script>
+    var offset = Math.round(Math.random() * 80);
+    function color(i) {
+        switch (i % 80) {
+            case 0:
+                return "#f44336";
+            case 1:
+                return "#e53935";
+            case 2:
+                return "#d32f2f";
+            case 3:
+                return "#c62828";
+            case 4:
+                return "#b71c1c";
+            case 5:
+                return "#e91e63";
+            case 6:
+                return "#d81b60";
+            case 7:
+                return "#c2185b";
+            case 8:
+                return "#ad1457";
+            case 9:
+                return "#880e4f";
+            case 10:
+                return "#9c27b0";
+            case 11:
+                return "#8e24aa";
+            case 12:
+                return "#7b1fa2";
+            case 13:
+                return "#6a1b9a";
+            case 14:
+                return "#4a148c";
+            case 15:
+                return "#673ab7";
+            case 16:
+                return "#5e35b1";
+            case 17:
+                return "#512da8";
+            case 18:
+                return "#4527a0";
+            case 19:
+                return "#311b92";
+            case 20:
+                return "#3f51b5";
+            case 21:
+                return "#3949ab";
+            case 22:
+                return "#303f9f";
+            case 23:
+                return "#283593";
+            case 24:
+                return "#1a237e";
+            case 25:
+                return "#2196f3";
+            case 26:
+                return "#1e88e5";
+            case 27:
+                return "#1976d2";
+            case 28:
+                return "#1565c0";
+            case 29:
+                return "#0d47a1";
+            case 30:
+                return "#03a9f4";
+            case 31:
+                return "#039be5";
+            case 32:
+                return "#0288d1";
+            case 33:
+                return "#0277bd";
+            case 34:
+                return "#01579b";
+            case 35:
+                return "#00bcd4";
+            case 36:
+                return "#00acc1";
+            case 37:
+                return "#0097a7";
+            case 38:
+                return "#00838f";
+            case 39:
+                return "#006064";
+            case 40:
+                return "#009688";
+            case 41:
+                return "#00897b";
+            case 42:
+                return "#00796b";
+            case 43:
+                return "#00695c";
+            case 44:
+                return "#004d40";
+            case 45:
+                return "#4caf50";
+            case 46:
+                return "#43a047";
+            case 47:
+                return "#388e3c";
+            case 48:
+                return "#2e7d32";
+            case 49:
+                return "#1b5e20";
+            case 50:
+                return "#8bc34a";
+            case 51:
+                return "#7cb342";
+            case 52:
+                return "#689f38";
+            case 53:
+                return "#558b2f";
+            case 54:
+                return "#33691e";
+            case 55:
+                return "#cddc39";
+            case 56:
+                return "#c0ca33";
+            case 57:
+                return "#afb42b";
+            case 58:
+                return "#9e9d24";
+            case 59:
+                return "#827717";
+            case 60:
+                return "#ffeb3b";
+            case 61:
+                return "#fdd835";
+            case 62:
+                return "#fbc02d";
+            case 63:
+                return "#f9a825";
+            case 64:
+                return "#f57f17";
+            case 65:
+                return "#ffc107";
+            case 66:
+                return "#ffb300";
+            case 67:
+                return "#ffa000";
+            case 68:
+                return "#ff8f00";
+            case 69:
+                return "#ff6f00";
+            case 70:
+                return "#ff9800";
+            case 71:
+                return "#fb8c00";
+            case 72:
+                return "#f57c00";
+            case 73:
+                return "#ef6c00";
+            case 74:
+                return "#e65100";
+            case 75:
+                return "#ff5722";
+            case 76:
+                return "#f4511e";
+            case 77:
+                return "#e64a19";
+            case 78:
+                return "#d84315";
+            case 79:
+                return "#bf360c";
+        }
+    }
     var height = 800;
     var width = 1080;
     var svg = d3.select("svg");
@@ -272,30 +439,7 @@
         return elementPosition(data2[t].i - 1, data2[t].j - 1);
     }
     function fillColor(d, i) {
-        var color = d % 0xffffff;
-        var RmG = Math.round(color / 0xffff) - Math.round(color % 0xffff / 0xff);
-        var GmB = Math.round(color % 0xffff / 0xff) - Math.round(color % 0xff);
-        var BmR = Math.round(color % 0xff) - Math.round(color / 0xffff);
-        color += Math.round(RmG * 0xffff + GmB * 0xff + BmR);
-        color = color > 0xffffff ? color % 0xffffff : (color < 0x000000 ? color + 0xffffff : color);
-        switch (color.toString(18).length) {
-            case 0:
-                return "#000000";
-            case 1:
-                return "#00" + color.toString(16) + "00" + color.toString(16);
-            case 2:
-                return "#" + color.toString(16) + color.toString(16) + color.toString(16);
-            case 3:
-                return "#00" + color.toString(16) + "0" + color.toString(16);
-            case 4:
-                return "#00" + color.toString(16);
-            case 5:
-                return "#0" + color.toString(16);
-            case 6:
-                return "#" + color.toString(16);
-            default:
-                return "#000000";
-        }
+        return color(d + offset);
     }
     function render() {
         //画圆

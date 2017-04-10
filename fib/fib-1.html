@@ -59,7 +59,8 @@
         <i class="large material-icons">menu</i>
     </a>
     <ul>
-        <li class="waves-effect waves-light"><a href="../index.html" class="tooltipped" id="text-tooltip-home"><i
+        <li class="waves-effect waves-light"><a href="../index.html" class="tooltipped" id="text-tooltip-home"
+                                                data-position="top" data-delay="50"><i
                 class="material-icons">view_carousel</i></a></li>
         <li class="waves-effect waves-light"><a href="#!" class="tooltipped button-collapse" data-activates="slide-out"
                                                 id="text-tooltip-sidenav" data-position="top" data-delay="50"><i
@@ -216,6 +217,7 @@
             .on("drag", dragged)
             .on("end", dragended));
         var lines = links_elements.selectAll("line").data(graph.link).enter().append("line").attr("stroke", "transparent");
+
         function ticked() {
             circles.attr("cx", function (d) {
                 return d.x;
@@ -236,6 +238,7 @@
                 return d.target.y;
             });
         }
+
         simulation.nodes(graph.node).on("tick", ticked);
         simulation.force("link", d3.forceLink().id(function (d) {
             return d.sid;
