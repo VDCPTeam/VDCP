@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
 <head>
-    <meta charset="UTF-8">
-    <!--标题栏-->
-    <title>template</title>
+    <script type="text/javascript" src="../lib/d3-4.7.1/d3.min.js"></script>
+    <script type="text/javascript" src="../node_modules/hammerjs/hammer.min.js"></script>
+    <script type="text/javascript" src="../lib/jquery-3.3.1/jquery-3.1.1.min.js"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <script src="../lib/jquery-3.3.1/jquery-3.1.1.min.js"></script>
-    <script src="../lib/materialize-0.97.8/js/materialize.min.js"></script>
-    <link rel="stylesheet" href="../lib/materialize-0.97.8/css/materialize.min.css"/>
-    <script src="../lib/d3-4.7.1/d3.min.js"></script>
-    <script type="text/javascript" async
-            src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+    <script type="text/javascript" src="../node_modules/materialize-css/bin/materialize.js"></script>
+    <link rel="stylesheet" type="text/css" href="../node_modules/materialize-css/bin/materialize.css">
+    <meta charset="UTF-8">
+    <script type="text/javascript"
+            src="../node_modules/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
     </script>
+    <title></title>
     <style type="text/css">
         body {
             background: gray;
@@ -57,7 +57,7 @@
         <i class="large material-icons">menu</i>
     </a>
     <ul>
-        <li class="waves-effect waves-light"><a href="../" class="tooltipped" id="text-tooltip-home"><i
+        <li class="waves-effect waves-light"><a href="../index.html" class="tooltipped" id="text-tooltip-home"><i
                 class="material-icons">view_carousel</i></a></li>
         <li class="waves-effect waves-light"><a href="#!" class="tooltipped button-collapse" data-activates="slide-out"
                                                 id="text-tooltip-sidenav" data-position="top" data-delay="50"><i
@@ -149,7 +149,7 @@
             $("#text-fib-2-info").html(data.fib_2_info);
             $("#fib-2-help").html(data.fib_2_help);
             $(".text-next").html(data.next);
-            document.title = data.fib_2_title;
+            document.title = data.fib_3_title;
             /**
              * 到这里结束
              */
@@ -187,7 +187,276 @@
 </script>
 <!--开始本页内容-->
 <script type="text/javascript">
-
+    var svg = d3.select("svg");
+    var main = svg.append("g").attr("id", "main");
+    var width = $("svg").width();
+    var height = $("svg").height();
+    var baseRadius = 5;
+    function dataMaker(max) {
+        var fiData = [];
+        fiData[0] = {
+            x: width / 2,
+            y: height / 2,
+            data: 1
+        };
+        fiData[1] = {
+            x: fiData[0].x + baseRadius,
+            y: fiData[0].y + baseRadius,
+            data: 1
+        };
+        var i;
+        for (i = 2; i < max; i++) {
+            fiData[i] = {
+                x: 0,
+                y: 0,
+                rx: 0,
+                ry: 0,
+                data: fiData[i - 1].data + fiData[i - 2].data
+            };
+            switch (i % 4) {
+                case 0:
+                    fiData[i].x = fiData[i - 1].x - fiData[i - 1].data * baseRadius;
+                    fiData[i].y = fiData[i - 1].y + fiData[i - 1].data * baseRadius;
+                    break;
+                case 1:
+                    fiData[i].x = fiData[i - 1].x + fiData[i - 1].data * baseRadius;
+                    fiData[i].y = fiData[i - 1].y + fiData[i - 1].data * baseRadius;
+                    break;
+                case 2:
+                    fiData[i].x = fiData[i - 1].x + fiData[i - 1].data * baseRadius;
+                    fiData[i].y = fiData[i - 1].y - fiData[i - 1].data * baseRadius;
+                    break;
+                case 3:
+                    fiData[i].x = fiData[i - 1].x - fiData[i - 1].data * baseRadius;
+                    fiData[i].y = fiData[i - 1].y - fiData[i - 1].data * baseRadius;
+                    break;
+            }
+        }
+        return fiData;
+    }
+    var dataCount = 34;
+    var data = dataMaker(dataCount);
+    var lines = main.append("g").attr("id", "lines");
+    var arcs = main.append("g").attr("id", "arcs").attr("transform", "translate(" + (width / 2 + baseRadius) + "," + height / 2 + ")").attr("z", 0);
+    var circles = main.append("g").attr("id", "circles").attr("z", 15);
+    var texts = main.append("g").attr("id", "texts").attr("z", 30);
+    svg.call(d3.zoom().scaleExtent([0.0003, 100]).on("zoom", function () {
+        main.attr("transform", d3.event.transform);
+    }));
+    function color(i) {
+        switch (i % 80) {
+            case 0: return "#f44336";
+            case 1: return "#e53935";
+            case 2: return "#d32f2f";
+            case 3: return "#c62828";
+            case 4: return "#b71c1c";
+            case 5: return "#e91e63";
+            case 6: return "#d81b60";
+            case 7: return "#c2185b";
+            case 8: return "#ad1457";
+            case 9: return "#880e4f";
+            case 10: return "#9c27b0";
+            case 11: return "#8e24aa";
+            case 12: return "#7b1fa2";
+            case 13: return "#6a1b9a";
+            case 14: return "#4a148c";
+            case 15: return "#673ab7";
+            case 16: return "#5e35b1";
+            case 17: return "#512da8";
+            case 18: return "#4527a0";
+            case 19: return "#311b92";
+            case 20: return "#3f51b5";
+            case 21: return "#3949ab";
+            case 22: return "#303f9f";
+            case 23: return "#283593";
+            case 24: return "#1a237e";
+            case 25: return "#2196f3";
+            case 26: return "#1e88e5";
+            case 27: return "#1976d2";
+            case 28: return "#1565c0";
+            case 29: return "#0d47a1";
+            case 30: return "#03a9f4";
+            case 31: return "#039be5";
+            case 32: return "#0288d1";
+            case 33: return "#0277bd";
+            case 34: return "#01579b";
+            case 35: return "#00bcd4";
+            case 36: return "#00acc1";
+            case 37: return "#0097a7";
+            case 38: return "#00838f";
+            case 39: return "#006064";
+            case 40: return "#009688";
+            case 41: return "#00897b";
+            case 42: return "#00796b";
+            case 43: return "#00695c";
+            case 44: return "#004d40";
+            case 45: return "#4caf50";
+            case 46: return "#43a047";
+            case 47: return "#388e3c";
+            case 48: return "#2e7d32";
+            case 49: return "#1b5e20";
+            case 50: return "#8bc34a";
+            case 51: return "#7cb342";
+            case 52: return "#689f38";
+            case 53: return "#558b2f";
+            case 54: return "#33691e";
+            case 55: return "#cddc39";
+            case 56: return "#c0ca33";
+            case 57: return "#afb42b";
+            case 58: return "#9e9d24";
+            case 59: return "#827717";
+            case 60: return "#ffeb3b";
+            case 61: return "#fdd835";
+            case 62: return "#fbc02d";
+            case 63: return "#f9a825";
+            case 64: return "#f57f17";
+            case 65: return "#ffc107";
+            case 66: return "#ffb300";
+            case 67: return "#ffa000";
+            case 68: return "#ff8f00";
+            case 69: return "#ff6f00";
+            case 70: return "#ff9800";
+            case 71: return "#fb8c00";
+            case 72: return "#f57c00";
+            case 73: return "#ef6c00";
+            case 74: return "#e65100";
+            case 75: return "#ff5722";
+            case 76: return "#f4511e";
+            case 77: return "#e64a19";
+            case 78: return "#d84315";
+            case 79: return "#bf360c";
+        }
+    }
+    function textcolor(i) {
+        var j = Math.floor(i % 80 / 5);
+        switch (j) {
+            case 0: return "#ef9a9a";
+            case 1: return "#f48fb1";
+            case 2: return "#ce93d8";
+            case 3: return "#b39ddb";
+            case 4: return "#9fa8da";
+            case 5: return "#90caf9";
+            case 6: return "#81d4fa";
+            case 7: return "#80deea";
+            case 8: return "#80cbc4";
+            case 9: return "#a5d6a7";
+            case 10: return "#c5e1a5";
+            case 11: return "#e6ee9c";
+            case 12: return "#fff59d";
+            case 13: return "#ffe082";
+            case 14: return "#ffcc80";
+            case 15: return "#ffab91";
+        }
+    }
+    var offset = Math.round(Math.random() * 80);
+    circles.selectAll("circle").data(data).enter().append("circle").attr("stroke", "transparent").attr("fill", function (d, i) {
+        return color(i + offset);
+    }).attr("r", function (d, i) {
+        return Math.round(d.data * 2) + "px";
+    }).attr("cx", function (d, i) {
+        return d.x + "px";
+    }).attr("cy", function (d, i) {
+        return d.y + "px";
+    });
+    texts.selectAll("text").data(data).enter().append("text").attr("fill", function (d, i) {
+        return textcolor(i + offset);
+    }).attr("font-size", function (d, i) {
+        return Math.round(d.data / 2) + "px";
+    }).attr("x", function (d, i) {
+        return d.x + "px";
+    }).attr("y", function (d, i) {
+        return d.y + "px";
+    }).text(function (d, i) {
+        return d.data;
+    });
+    var arcnodes = arcs.selectAll(".arc").data(data).enter().append("g").classed("arc", true);
+    arcnodes.append("path").attr("d", d3.arc().outerRadius(function (d, i) {
+        return d.data * baseRadius;
+    }).startAngle(function (d, i) {
+        return Math.PI / 2 * ((2 - i) % 4);
+    }).endAngle(function (d, i) {
+        return Math.PI / 2 * ((2 - i) % 4 + 1);
+    })).attr("stroke", function (d, i) {
+        return color(i + offset);
+    }).attr("stroke-width", function (d, i) {
+        var width = d.data / 2;
+        return width >= 2 ? width : 2;
+    }).attr("fill", "transparent");
+    function fibonacci(max) {
+        var arr = [1, 1];
+        for (var i = 2; i < max; ++i) {
+            arr.push(arr[i - 1] + arr[i - 2]);
+        }
+        return arr;
+    }
+    var fib = fibonacci(dataCount + 1);
+    function gettr(fib, dcount) {
+        var arr = [
+            {
+                x: 0,
+                y: 0
+            },
+            {
+                x: 0,
+                y: 0
+            },
+            {
+                x: -1,
+                y: 0
+            },
+            {
+                x: -1,
+                y: 1
+            }
+        ];
+        var sum = 1;
+        for (var i = 4; i < dcount + 1; ++i) {
+            var tr = {};
+            tr.x = fib[Math.floor((i - 2) / 2)] * fib[Math.floor((i - 2) / 2)] * (Math.floor((i - 4) / 2) % 2 === 0 ? 1 : -1);
+            if (i % 2 === 1)
+                sum += fib[Math.floor((i - 2) / 2)] * fib[Math.floor((i - 2) / 2)];
+            tr.y = sum * (Math.floor((i - 3) / 2) % 2 === 0 ? 1 : -1);
+            arr.push(tr);
+        }
+        return arr;
+    }
+    var trans = gettr(fib, dataCount);
+    arcnodes.attr("transform", function (d, i) {
+        return "translate(" + trans[i].x * baseRadius + "," + trans[i].y * baseRadius + ")";
+    });
+    var linenodes = lines.selectAll("rect").data(data).enter().append("rect").attr("x", function (d, i) {
+        switch (i % 4) {
+            case 2:
+            case 3:
+                return d.x - Math.round(d.data * baseRadius);
+            default:
+                return d.x;
+        }
+    }).attr("y", function (d, i) {
+        switch (i % 4) {
+            case 1:
+            case 2:
+                return d.y - Math.round(d.data * baseRadius);
+            default:
+                return d.y;
+        }
+    }).attr("width", function (d, i) {
+        return Math.round(d.data * baseRadius) + "px";
+    }).attr("height", function (d, i) {
+        return Math.round(d.data * baseRadius) + "px";
+    }).attr("fill", "transparent").attr("stroke", "transparent").attr("stroke-width", function (d, i) {
+        var width = d.data / 2;
+        return Math.round(width >= 2 ? width : 2);
+    });
+    var cntrl = 0;
+    setInterval(function () {
+        linenodes.transition().duration(300).attr("stroke", function (d, i) {
+            if (i < cntrl)
+                return textcolor(i + offset);
+            else return "transparent";
+        });
+        cntrl++;
+    }, 300);
 </script>
 </body>
 </html>

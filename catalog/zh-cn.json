@@ -14,6 +14,10 @@
       {
         "text": "斐波那契-运算",
         "href": "../fib/fib-2.html"
+      },
+      {
+        "text": "斐波那契-螺旋线",
+        "href": "../fib/fib-3.html"
       }
     ]
   },
